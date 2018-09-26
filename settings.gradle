@@ -1,0 +1,5 @@
+rootProject.name = 'address-index-api'
+
+include 'parsers'
+include 'model'
+include 'server'

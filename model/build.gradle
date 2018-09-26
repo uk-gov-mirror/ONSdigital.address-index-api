@@ -1,0 +1,12 @@
+ext {
+    scalaVersion = '2.12'
+    playVersion = '2.6.10'
+}
+
+dependencies {
+    compile project(':parsers')
+    compile "com.typesafe.play:play_${scalaVersion}:${playVersion}"
+    compile("com.sksamuel.elastic4s:elastic4s-http_${scalaVersion}:6.1.3") {
+        exclude group: "log4j"
+    }
+}
