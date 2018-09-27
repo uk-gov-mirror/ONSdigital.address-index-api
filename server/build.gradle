@@ -1,11 +1,10 @@
 plugins {
     id 'play'
+    id "com.github.lkishalmi.gatling" version "0.7.1"
 }
 
 ext {
-    scalaVersion = '2.12'
-    playVersion = '2.6.10'
-    elastic4sVersion = '6.1.3'
+    gatlingVersion = '2.3.0'
 }
 
 model {
@@ -17,9 +16,18 @@ model {
     }
 }
 
+
+gatling {
+    sourceRoot = "gatling"
+    simulationsDir = "gatling"
+    toolVersion = gatlingVersion
+    jvmArgs = [ '-server', '-Xms512M', '-Xmx512M' ]
+}
+
 dependencies {
     play project(':model')
-    play "com.typesafe.play:play-guice_$scalaVersion:$playVersion"
+    playRun fileTree(dir: "/Users/sion/Code/ons/address-index-api/server/parsers/src/main/resources/", includes: ['*.so'])
+    play "com.typesafe.play:play-guice_${scalaVersion}:${playVersion}"
     play "com.typesafe.play:filters-helpers_${scalaVersion}:${playVersion}" // filters
     play "com.github.melrief:pureconfig_${scalaVersion}:0.3.3"
 
