@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils
 
 import scala.io.{BufferedSource, Source}
 import scala.util.Try
+import util.control.Breaks._
 
 /**
   * Hold
@@ -32,6 +33,7 @@ object Tokens {
   val postcode: String = "Postcode"
   val postcodeIn: String = "PostcodeIn"
   val postcodeOut: String = "PostcodeOut"
+  val classification: String = "Classification"
 
   val defaultPreProcessFolder = "parser.input-pre-post-processing.folder"
   val defaultMapFolder = "parser.scoring.folder"
@@ -104,8 +106,36 @@ object Tokens {
     val boroughTreatedTokens = postTokenizeTreatmentBorough(postcodeTreatedTokens)
     val buildingNumberTreatedTokens = postTokenizeTreatmentBuildingNumber(boroughTreatedTokens)
     val buildingNameTreatedTokens = postTokenizeTreatmentBuildingName(buildingNumberTreatedTokens)
+    val classificationTreatedTokens = postTokenizeTreatmentClassification(buildingNameTreatedTokens)
+    classificationTreatedTokens
+  }
 
-    buildingNameTreatedTokens
+  /**
+    * Normalizes postcode address
+    * @param tokens tokens grouped by label
+    * @return Map with tokens that will contain normalized postcode address
+    */
+  def postTokenizeTreatmentClassification(tokens: Map[String, String]): Map[String, String] = {
+
+    val testKey = findKeywords(tokens)
+    System.out.println("testKey = " +testKey)
+    val foundClass: Option[String] = if (testKey=="") None else Try(classKeywords.get(testKey)).getOrElse(None)
+
+    foundClass match {
+      case Some(classcode) => tokens + (classification -> classcode)
+      case _ => tokens
+    }
+  }
+
+  def findKeywords(tokens: Map[String, String]): String = {
+    breakable {
+      for ((k,v) <- tokens){
+        v.split(" ").map {word =>
+        if (classKeywords.contains(word)) return word
+        }
+      }
+    }
+    ""
   }
 
   /**
@@ -395,6 +425,11 @@ object Tokens {
     * List of custodians
     */
   lazy val custodianList: Seq[String] = Tokens.fileToArray(s"custodianList")
+
+  /**
+    * List of classification keywords
+    */
+  lazy val classKeywords: Map[String,String] = Tokens.fileToMap(s"classkey",defaultPreProcessFolder)
 
 
   /**
