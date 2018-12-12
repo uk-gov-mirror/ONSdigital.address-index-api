@@ -38,15 +38,15 @@ lazy val assemblySettings: Seq[Def.Setting[_]] = Seq(
   }
 )
 
-lazy val serverUniversalMappings: Seq[Def.Setting[_]] = Seq(
+//lazy val serverUniversalMappings: Seq[Def.Setting[_]] = Seq(
   // The following will cause parsers/.../resources directory to be added to the list of mappings recursively
   // excluding .md and .conf files
-  mappings in Universal ++= {
-    val rootDir = (baseDirectory.value).getParentFile
-    def directoryToAdd = (rootDir / "parsers/src/main/resources")
-    ((directoryToAdd.***) * ("*" -- ("*.md" || "*.conf"))) pair relativeTo(rootDir)
-  }
-)
+//  mappings in Universal ++= {
+ //   val rootDir = (baseDirectory.value).getParentFile
+//    def directoryToAdd = (rootDir / "parsers/src/main/resources")
+//    ((directoryToAdd.***) * ("*" -- ("*.md" || "*.conf"))) pair relativeTo(rootDir)
+ // }
+//)
 
 lazy val Resolvers: Seq[MavenRepository] = Seq(
   Resolver.typesafeRepo("releases"),
@@ -77,7 +77,7 @@ lazy val localCommonSettings: Seq[Def.Setting[_]] = Seq(
   ),
   // TODO: Fix the following errors highlighted by scapegoat. Remove the corresponding overrides below.
   scalacOptions in Scapegoat += "-P:scapegoat:overrideLevels:TraversableHead=Warning:OptionSize=Warning:ComparingFloatingPointTypes=Warning",
-  ivyScala := ivyScala.value map(_.copy(overrideScalaVersion = true)),
+ // ivyScala := ivyScala.value map(_.copy(overrideScalaVersion = true)),
   resolvers ++= Resolvers,
   coverageExcludedPackages := ".*Routes.*;.*ReverseRoutes.*;.*javascript.*"
 )
@@ -167,7 +167,7 @@ lazy val `address-index-client` = project.in(file("client"))
 
 lazy val `address-index-server` = project.in(file("server"))
   .settings(localCommonSettings: _*)
-  .settings(serverUniversalMappings: _*)
+//  .settings(serverUniversalMappings: _*)
   .settings(
     libraryDependencies ++= serverDeps,
     routesGenerator := InjectedRoutesGenerator,
