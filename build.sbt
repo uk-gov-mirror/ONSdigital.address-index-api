@@ -38,15 +38,15 @@ lazy val assemblySettings: Seq[Def.Setting[_]] = Seq(
   }
 )
 
-//lazy val serverUniversalMappings: Seq[Def.Setting[_]] = Seq(
-  // The following will cause parsers/.../resources directory to be added to the list of mappings recursively
-  // excluding .md and .conf files
-//  mappings in Universal ++= {
- //   val rootDir = (baseDirectory.value).getParentFile
-//    def directoryToAdd = (rootDir / "parsers/src/main/resources")
-//    ((directoryToAdd.***) * ("*" -- ("*.md" || "*.conf"))) pair relativeTo(rootDir)
- // }
-//)
+lazy val serverUniversalMappings: Seq[Def.Setting[_]] = Seq(
+ //  The following will cause parsers/.../resources directory to be added to the list of mappings recursively
+ //  excluding .md and .conf files
+  mappings in Universal ++= {
+    val rootDir = (baseDirectory.value).getParentFile
+    def directoryToAdd = (rootDir / "parsers/src/main/resources")
+    ((directoryToAdd.allPaths) * ("*" -- ("*.md" || "*.conf"))) pair relativeTo(rootDir)
+  }
+)
 
 lazy val Resolvers: Seq[MavenRepository] = Seq(
   Resolver.typesafeRepo("releases"),
@@ -167,7 +167,7 @@ lazy val `address-index-client` = project.in(file("client"))
 
 lazy val `address-index-server` = project.in(file("server"))
   .settings(localCommonSettings: _*)
-//  .settings(serverUniversalMappings: _*)
+  .settings(serverUniversalMappings: _*)
   .settings(
     libraryDependencies ++= serverDeps,
     routesGenerator := InjectedRoutesGenerator,
