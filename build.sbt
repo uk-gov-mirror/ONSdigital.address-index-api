@@ -17,6 +17,8 @@ lazy val Versions = new {
   val scapegoatVersion = "1.3.8"
 }
 
+swaggerV3 := true
+
 name := "address-index"
 scmInfo := Some(
   ScmInfo(
