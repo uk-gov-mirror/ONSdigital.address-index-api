@@ -2,7 +2,6 @@ package uk.gov.ons.addressIndex.server.model.response
 
 import org.scalatest.{Matchers, WordSpec}
 import uk.gov.ons.addressIndex.model.db.index._
-import uk.gov.ons.addressIndex.model.server.response._
 import uk.gov.ons.addressIndex.model.server.response.address._
 
 /**
@@ -146,7 +145,7 @@ class AddressResponseAddressSpec extends WordSpec with Matchers {
   )
 
   val givenRelative = Relative (
-    level = 1.toInt,
+    level = 1,
     siblings = Array(6L, 7L),
     parents = Array(8L, 9L)
   )
