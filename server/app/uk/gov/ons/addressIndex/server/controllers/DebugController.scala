@@ -74,7 +74,7 @@ class DebugController @Inject()(val controllerComponents: ControllerComponents,
       filterDateRange = DateRange(startDateVal, endDateVal),
       limit = 0,
       queryParamsConfig = None,
-      fromSource = fromSourceVal
+      fromSource = AddressSource.fromString(fromSourceVal).right.get // temporary, should replace the verification above
     )
 
     val query = esRepo.makeQuery(args)

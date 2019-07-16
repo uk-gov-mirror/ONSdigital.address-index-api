@@ -66,7 +66,7 @@ class PartialAddressController @Inject()(val controllerComponents: ControllerCom
     val verb = verbose.flatMap(x => Try(x.toBoolean).toOption).getOrElse(false)
 
     val epochVal = epoch.getOrElse("")
-    val fromsourceVal = {if (fromsource.getOrElse("all").isEmpty) "all" else fromsource.getOrElse("all")}
+    val fromSourceVal = {if (fromsource.getOrElse("all").isEmpty) "all" else fromsource.getOrElse("all")}
 
     val defStartBoost = conf.config.elasticSearch.defaultStartBoost
     // query string param for testing, will probably be removed
@@ -111,7 +111,7 @@ class PartialAddressController @Inject()(val controllerComponents: ControllerCom
       limit = Some(limitInt),
       offset = Some(offsetInt),
       verbose = Some(verb),
-      fromSource = Some(fromsourceVal)
+      fromSource = Some(fromSourceVal)
     )
 
     val result: Option[Future[Result]] =
@@ -140,7 +140,7 @@ class PartialAddressController @Inject()(val controllerComponents: ControllerCom
           verbose = verb,
           epoch = epochVal,
           skinny = !verb,
-          fromSource = fromsourceVal
+          fromSource = AddressSource.fromString(fromSourceVal).right.get // temporary, should replace the verification above
         )
 
         val request: Future[HybridAddressCollection] =
@@ -176,7 +176,7 @@ class PartialAddressController @Inject()(val controllerComponents: ControllerCom
                   total = total,
                   maxScore = maxScore,
                   verbose = verb,
-                  fromsource = fromsourceVal
+                  fromsource = fromSourceVal
                 ),
                 status = OkAddressResponseStatus
               )

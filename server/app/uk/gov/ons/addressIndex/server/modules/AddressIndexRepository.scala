@@ -104,14 +104,14 @@ class AddressIndexRepository @Inject()(conf: AddressIndexConfigModule,
     val queryWithMatchType = if (fallback) queryBase.matchType("best_fields") else queryBase.matchType("phrase").slop(slopVal)
 
     val fromSourceQueryMust = args.fromSource match {
-      case "ewonly" => Seq(termsQuery("fromSource","EW"))
-      case "nionly" => Seq(termsQuery("fromSource","NI"))
+      case AddressSource.EWOnly => Seq(termsQuery("fromSource","EW"))
+      case AddressSource.NIOnly => Seq(termsQuery("fromSource","NI"))
       case _ => Seq.empty
     }
 
     val fromSourceQueryShould = args.fromSource match {
-      case "niboost" => Seq(termsQuery("fromSource","NI"))
-      case "ewboost" => Seq(termsQuery("fromSource","EW"))
+      case AddressSource.NIBoost => Seq(termsQuery("fromSource","NI"))
+      case AddressSource.EWBoost => Seq(termsQuery("fromSource","EW"))
       case _ => Seq.empty
     }
 
@@ -213,10 +213,8 @@ class AddressIndexRepository @Inject()(conf: AddressIndexConfigModule,
     }
 
     val fromSourceQuery = args.fromSource match {
-      case "ewonly" => Seq(termsQuery("fromSource","EW"))
-      case "nionly" => Seq(termsQuery("fromSource","NI"))
-      case "niboost" => Seq(termsQuery("fromSource","NI"))
-      case "ewboost" => Seq(termsQuery("fromSource","EW"))
+      case AddressSource.EWOnly | AddressSource.EWBoost => Seq(termsQuery("fromSource","EW"))
+      case AddressSource.NIOnly | AddressSource.NIBoost => Seq(termsQuery("fromSource","NI"))
       case _ => Seq.empty
     }
 
@@ -712,16 +710,14 @@ class AddressIndexRepository @Inject()(conf: AddressIndexConfigModule,
     }
 
     val fromSourceQuery1 = args.fromSource match {
-      case "ewonly" => Seq(termsQuery("fromSource","EW"))
-      case "nionly" => Seq(termsQuery("fromSource","NI"))
+      case AddressSource.EWOnly => Seq(termsQuery("fromSource","EW"))
+      case AddressSource.NIOnly => Seq(termsQuery("fromSource","NI"))
       case _ => Seq.empty
     }
 
     val fromSourceQuery2 = args.fromSource match {
-      case "ewonly" => Seq(termsQuery("fromSource","EW"))
-      case "nionly" => Seq(termsQuery("fromSource","NI"))
-      case "niboost" => Seq(termsQuery("fromSource","NI"))
-      case "ewboost" => Seq(termsQuery("fromSource","EW"))
+      case AddressSource.EWOnly | AddressSource.EWBoost => Seq(termsQuery("fromSource","EW"))
+      case AddressSource.NIOnly | AddressSource.NIBoost => Seq(termsQuery("fromSource","NI"))
       case _ => Seq.empty
     }
 
@@ -867,9 +863,9 @@ class AddressIndexRepository @Inject()(conf: AddressIndexConfigModule,
         val partResult = client.execute(query).map(HybridAddressCollection.fromEither)
         // if there are no results for the "phrase" query, delegate to an alternative "best fields" query
         partResult.map { adds =>
-          if (adds.addresses.isEmpty && partialArgs.fallback && (args.inputOpt.nonEmpty && args.inputOpt.get.length >= minimumFallback)) {
+          if (adds.addresses.isEmpty && partialArgs.fallback && (partialArgs.input.length >= minimumFallback)) {
             logger.info(s"minimumFallback: ${minimumFallback} ")
-            logger.info(s"Partial query is empty and fall back is on. Input length: ${args.inputOpt.get.length}. Run fallback query.")
+            logger.info(s"Partial query is empty and fall back is on. Input length: ${partialArgs.input.length}. Run fallback query.")
             client.execute(fallbackQuery).map(HybridAddressCollection.fromEither)}
           else partResult
         }.flatten
@@ -895,7 +891,7 @@ class AddressIndexRepository @Inject()(conf: AddressIndexConfigModule,
         verbose = false,
         isBulk = true,
         epoch = args.epoch,
-        fromSource = "all"
+        fromSource = AddressSource.All
       )
       val bulkAddressRequest: Future[Seq[AddressBulkResponseAddress]] =
         runMultiResultQuery(addressArgs).map { case HybridAddressCollection(hybridAddresses, _, _) =>

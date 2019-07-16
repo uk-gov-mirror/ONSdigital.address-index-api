@@ -21,10 +21,18 @@ trait Limitable {
   def limit: Int
 }
 
+object Limitable {
+  val default = 10
+}
+
 /** the query can be given a starting offset from which to return results */
 trait StartAtOffset {
   /** the match index at which to begin returning results */
   def start: Int
+}
+
+object StartAtOffset {
+  val default = 0
 }
 
 /** the query can be filtered */
@@ -54,10 +62,18 @@ trait DateFilterable {
   def filterDateRange: DateRange
 }
 
+object DateFilterable {
+  val default = DateRange()
+}
+
 /** the query can be told to report back in verbose mode */
 trait Verboseable {
   /** */
   def verbose: Boolean
+}
+
+object Verboseable {
+  val default = true
 }
 
 /** the query can be run over skinny indexes */
@@ -66,10 +82,50 @@ trait Skinnyable {
   def skinny: Boolean
 }
 
+object Skinnyable {
+  val default = false
+}
+
 /** the query takes additional configuration parameters */
 trait Configurable {
   /** */
   def queryParamsConfig: Option[QueryParamsConfig]
+}
+
+object Configurable {
+  val default: Option[QueryParamsConfig] = None
+}
+
+/** the query can specify which address source to use */
+object AddressSource extends Enumeration {
+
+  case class Inst(asString: String) extends super.Val {}
+
+  def fromString(str: String): Either[String, AddressSource.Inst] = {
+    str match {
+      case "nionly" => Right(NIOnly)
+      case "ewonly" => Right(EWOnly)
+      case "niboost" => Right(NIBoost)
+      case "ewboost" => Right(EWBoost)
+      case "all" => Right(All)
+      case _ => Left(str)
+    }
+  }
+
+  val All = Inst("all")
+  val NIOnly = Inst("nionly")
+  val EWOnly = Inst("ewonly")
+  val NIBoost = Inst("niboost")
+  val EWBoost = Inst("ewboost")
+}
+
+trait FromSource {
+  /** */
+  def fromSource: AddressSource.Inst
+}
+
+object FromSource {
+  val default: AddressSource.Inst = AddressSource.All
 }
 
 /** the root class of all query arguments */
@@ -79,90 +135,13 @@ sealed abstract class QueryArgs {
 
   def epochParam: String = if (epoch.isEmpty) "_current" else "_" + epoch
 
-  def epochOpt: Option[String] = Some(epoch)
-
   /** */
   def historical: Boolean
+}
 
-  def historicalOpt: Option[Boolean] = Some(historical)
-
-  // other trait fields
-
-  def limitOpt: Option[Int] = None
-
-  def startOpt: Option[Int] = None
-
-  def filtersOpt: Option[String] = None
-
-  def filterDateRangeOpt: Option[DateRange] = None
-
-  def verboseOpt: Option[Boolean] = None
-
-  def skinnyOpt: Option[Boolean] = None
-
-  def queryParamsConfigOpt: Option[QueryParamsConfig] = None
-
-  // other uprn fields
-
-  def uprnOpt: Option[String] = None
-
-  // other partial fields
-
-  def inputOpt: Option[String] = None
-
-  def fallbackOpt: Option[Boolean] = None
-
-  // other postcode fields
-
-  def postcodeOpt: Option[String] = None
-
-  // other address fields
-
-  def tokensOpt: Option[Map[String, String]] = None
-
-  def regionOpt: Option[Region] = None
-
-  def isBulkOpt: Option[Boolean] = None
-
-  // other bulk fields
-
-  def requestsDataOpt: Option[Stream[BulkAddressRequestData]] = None
-
-  def matchThresholdOpt: Option[Float] = None
-
-  def includeFullAddressOpt: Option[Boolean] = None
-
-  // used when assembling error reports
-
-  def inputOrDefault: String = this.inputOpt.getOrElse("")
-
-  def postcodeOrDefault: String = this.postcodeOpt.getOrElse("")
-
-  def uprnOrDefault: String = this.uprnOpt.getOrElse("")
-
-  def epochOrDefault: String = this.epochOpt.getOrElse("")
-
-  def filterOrDefault: String = this.filtersOpt.getOrElse("")
-
-  def historicalOrDefault: Boolean = this.historicalOpt.getOrElse(false)
-
-  def limitOrDefault: Int = this.limitOpt.getOrElse(0)
-
-  def offsetOrDefault: Int = this.startOpt.getOrElse(0)
-
-  def startDateOrDefault: String = this.filterDateRangeOpt.map(_.start).getOrElse("")
-
-  def endDateOrDefault: String = this.filterDateRangeOpt.map(_.end).getOrElse("")
-
-  def verboseOrDefault: Boolean = this.verboseOpt.getOrElse(false)
-
-  def rangeKMOrDefault: String = this.regionOpt.map(_.range.toString).getOrElse("")
-
-  def latitudeOrDefault: String = this.regionOpt.map(_.lat.toString).getOrElse("")
-
-  def longitudeOrDefault: String = this.regionOpt.map(_.lon.toString).getOrElse("")
-
-  def matchThresholdOrDefault: Float = this.matchThresholdOpt.getOrElse(0f)
+object QueryArgs {
+  val epochDefault = ""
+  val historicalDefault = true
 }
 
 /**
@@ -171,18 +150,12 @@ sealed abstract class QueryArgs {
   * @param uprn the UPRN to search by
   */
 final case class UPRNArgs(uprn: String,
-                          historical: Boolean = true,
-                          epoch: String = "",
+                          epoch: String = QueryArgs.epochDefault,
+                          historical: Boolean = QueryArgs.historicalDefault,
                          ) extends QueryArgs {
-  override def uprnOpt: Option[String] = Some(uprn)
 }
 
 sealed abstract class MultiResultArgs extends QueryArgs with Limitable with Filterable with Verboseable {
-  override def limitOpt: Option[Int] = Some(limit)
-
-  override def filtersOpt: Option[String] = Some(filters)
-
-  override def verboseOpt: Option[Boolean] = Some(verbose)
 }
 
 /**
@@ -193,26 +166,16 @@ sealed abstract class MultiResultArgs extends QueryArgs with Limitable with Filt
   */
 final case class PartialArgs(input: String,
                              fallback: Boolean = false,
-                             epoch: String = "",
-                             historical: Boolean = true,
-                             limit: Int,
-                             start: Int = 0,
+                             epoch: String = QueryArgs.epochDefault,
+                             historical: Boolean = QueryArgs.historicalDefault,
+                             limit: Int = Limitable.default,
+                             start: Int = StartAtOffset.default,
                              filters: String,
-                             filterDateRange: DateRange = DateRange(),
-                             verbose: Boolean = true,
-                             skinny: Boolean = false,
-                             fromSource: String
-                            ) extends MultiResultArgs with DateFilterable with StartAtOffset with Skinnyable {
-  override def inputOpt: Option[String] = Some(input)
-
-  override def fallbackOpt: Option[Boolean] = Some(fallback)
-
-  override def filterDateRangeOpt: Option[DateRange] = Some(filterDateRange)
-
-  override def startOpt: Option[Int] = Some(start)
-
-  override def skinnyOpt: Option[Boolean] = Some(skinny)
-
+                             filterDateRange: DateRange = DateFilterable.default,
+                             verbose: Boolean = Verboseable.default,
+                             skinny: Boolean = Skinnyable.default,
+                             fromSource: AddressSource.Inst = FromSource.default
+                            ) extends MultiResultArgs with DateFilterable with StartAtOffset with Skinnyable with FromSource {
   def inputNumbers: List[String] = input.split("\\D+").filter(_.nonEmpty).toList
 }
 
@@ -222,33 +185,27 @@ final case class PartialArgs(input: String,
   * @param postcode the postcode to search by
   */
 final case class PostcodeArgs(postcode: String,
-                              epoch: String = "",
-                              historical: Boolean = true,
-                              limit: Int,
-                              start: Int = 0,
+                              epoch: String = QueryArgs.epochDefault,
+                              historical: Boolean = QueryArgs.historicalDefault,
+                              limit: Int = Limitable.default,
+                              start: Int = StartAtOffset.default,
                               filters: String,
-                              verbose: Boolean = true,
-                              skinny: Boolean = false,
+                              verbose: Boolean = Verboseable.default,
+                              skinny: Boolean = Skinnyable.default,
                              ) extends MultiResultArgs with StartAtOffset with Skinnyable {
-  override def postcodeOpt: Option[String] = Some(postcode)
-
-  override def startOpt: Option[Int] = Some(start)
-
-  override def skinnyOpt: Option[Boolean] = Some(skinny)
 }
 
 /**
   * Search at random
   */
-final case class RandomArgs(epoch: String = "",
-                            historical: Boolean = true,
+final case class RandomArgs(epoch: String = QueryArgs.epochDefault,
+                            historical: Boolean = QueryArgs.historicalDefault,
                             filters: String,
-                            limit: Int,
-                            verbose: Boolean = true,
-                            skinny: Boolean = false,
-                            fromSource: String = "all"
+                            limit: Int = Limitable.default,
+                            verbose: Boolean = Verboseable.default,
+                            skinny: Boolean = Skinnyable.default,
+                            fromSource: AddressSource.Inst = FromSource.default
                            ) extends MultiResultArgs with Skinnyable {
-  override def skinnyOpt: Option[Boolean] = Some(skinny)
 }
 
 /**
@@ -260,29 +217,16 @@ final case class AddressArgs(input: String,
                              tokens: Map[String, String],
                              region: Option[Region],
                              isBulk: Boolean = false,
-                             epoch: String = "",
-                             historical: Boolean = true,
-                             limit: Int,
-                             start: Int = 0,
+                             epoch: String = QueryArgs.epochDefault,
+                             historical: Boolean = QueryArgs.historicalDefault,
+                             limit: Int = Limitable.default,
+                             start: Int = StartAtOffset.default,
                              filters: String,
-                             filterDateRange: DateRange = DateRange(),
-                             verbose: Boolean,
-                             queryParamsConfig: Option[QueryParamsConfig] = None,
-                             fromSource: String = "all"
+                             filterDateRange: DateRange = DateFilterable.default,
+                             verbose: Boolean = Verboseable.default,
+                             queryParamsConfig: Option[QueryParamsConfig] = Configurable.default,
+                             fromSource: AddressSource.Value = FromSource.default
                             ) extends MultiResultArgs with StartAtOffset with DateFilterable with Configurable {
-  override def inputOpt: Option[String] = Some(input)
-
-  override def tokensOpt: Option[Map[String, String]] = Some(tokens)
-
-  override def regionOpt: Option[Region] = region
-
-  override def isBulkOpt: Option[Boolean] = Some(isBulk)
-
-  override def startOpt: Option[Int] = Some(start)
-
-  override def filterDateRangeOpt: Option[DateRange] = Some(filterDateRange)
-
-  override def queryParamsConfigOpt: Option[QueryParamsConfig] = queryParamsConfig
 }
 
 /**
@@ -292,21 +236,10 @@ final case class AddressArgs(input: String,
 final case class BulkArgs(requestsData: Stream[BulkAddressRequestData],
                           matchThreshold: Float,
                           includeFullAddress: Boolean = false,
-                          epoch: String = "",
-                          historical: Boolean = true,
-                          limit: Int,
-                          filterDateRange: DateRange = DateRange(),
-                          queryParamsConfig: Option[QueryParamsConfig] = None,
+                          epoch: String = QueryArgs.epochDefault,
+                          historical: Boolean = QueryArgs.historicalDefault,
+                          limit: Int = Limitable.default,
+                          filterDateRange: DateRange = DateFilterable.default,
+                          queryParamsConfig: Option[QueryParamsConfig] = Configurable.default,
                          ) extends QueryArgs with Limitable with DateFilterable with Configurable {
-  override def requestsDataOpt: Option[Stream[BulkAddressRequestData]] = Some(requestsData)
-
-  override def matchThresholdOpt: Option[Float] = Some(matchThreshold)
-
-  override def includeFullAddressOpt: Option[Boolean] = Some(includeFullAddress)
-
-  override def limitOpt: Option[Int] = Some(limit)
-
-  override def filterDateRangeOpt: Option[DateRange] = Some(filterDateRange)
-
-  override def queryParamsConfigOpt: Option[QueryParamsConfig] = queryParamsConfig
 }

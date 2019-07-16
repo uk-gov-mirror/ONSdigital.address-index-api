@@ -7,7 +7,7 @@ import uk.gov.ons.addressIndex.model.server.response.address._
 import uk.gov.ons.addressIndex.server.model.dao.QueryValues
 import uk.gov.ons.addressIndex.server.modules.response.AddressControllerResponse
 import uk.gov.ons.addressIndex.server.modules.validation.AddressControllerValidation
-import uk.gov.ons.addressIndex.server.modules.{AddressArgs, ConfigModule, ElasticsearchRepository, ParserModule, Region, VersionModule}
+import uk.gov.ons.addressIndex.server.modules.{AddressArgs, AddressSource, ConfigModule, ElasticsearchRepository, ParserModule, Region, VersionModule}
 import uk.gov.ons.addressIndex.server.utils.{AddressAPILogger, _}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -81,7 +81,7 @@ class AddressController @Inject()(val controllerComponents: ControllerComponents
     val lonVal = lon.getOrElse("")
 
     val epochVal = epoch.getOrElse("")
-    val fromsourceVal = {if (fromsource.getOrElse("all").isEmpty) "all" else fromsource.getOrElse("all")}
+    val fromSourceVal = {if (fromsource.getOrElse("all").isEmpty) "all" else fromsource.getOrElse("all")}
 
     def writeLog(badRequestErrorMessage: String = "", formattedOutput: String = "", numOfResults: String = "", score: String = "", activity: String = ""): Unit = {
       val authVal = req.headers.get("authorization").getOrElse("Anon")
@@ -116,7 +116,7 @@ class AddressController @Inject()(val controllerComponents: ControllerComponents
       latitude = Some(latVal),
       longitude = Some(lonVal),
       matchThreshold = Some(thresholdFloat),
-      fromSource = Some(fromsourceVal)
+      fromSource = Some(fromSourceVal)
     )
 
     val args = AddressArgs(
@@ -130,7 +130,7 @@ class AddressController @Inject()(val controllerComponents: ControllerComponents
       start = offsetInt, // temporary, but zeroed later?
       limit = limitInt, // temporary, expanded later
       queryParamsConfig = None,
-      fromSource = fromsourceVal
+      fromSource = AddressSource.fromString(fromSourceVal).right.get // temporary, should replace the verification above
     )
 
     val result: Option[Future[Result]] =
@@ -225,7 +225,7 @@ class AddressController @Inject()(val controllerComponents: ControllerComponents
                   sampleSize = limitExpanded,
                   matchthreshold = thresholdFloat,
                   verbose = verb,
-                  fromsource = fromsourceVal
+                  fromsource = fromSourceVal
                 ),
                 status = OkAddressResponseStatus
               )
