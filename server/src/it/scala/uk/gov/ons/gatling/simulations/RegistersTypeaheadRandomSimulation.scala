@@ -18,7 +18,7 @@ class RegistersTypeaheadRandomSimulation extends Simulation {
   val requestRelPath = ConfigLoader("request_rel_path")
   val requestType = ConfigLoader("request_type")
   val requestName: String = ConfigLoader("request_name_prefix").stripSuffix(" ") + ": " + baseUrl + requestRelPath
-  val randomPath = "random"
+  val randomPath = "random?historical=false"
   val typeaheadPath = "partial?fallback=false&input="
 
   println(s"Running test with duration: $duration, " +
