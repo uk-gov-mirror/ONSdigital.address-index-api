@@ -258,7 +258,7 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
 
     val postcodeFormatted: String = args.postcode.toUpperCase
 
-    val isNotJustOutcode: Boolean = (postcodeFormatted.contains(" "))
+    val isNotJustOutcode: Boolean = (postcodeFormatted.trim.contains(" "))
 
     val queryFilter = if (args.filters.isEmpty) {
       Seq.empty
@@ -988,8 +988,8 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
   override def runMultiResultQuery(args: MultiResultArgs): Future[HybridAddressCollection] = {
     val query = makeQuery(args)
  // uncomment to see generated query
- //    val searchString = SearchBodyBuilderFn(query).string()
-  //   println(searchString)
+     val searchString = SearchBodyBuilderFn(query).string()
+     println(searchString)
     args match {
       case partialArgs: PartialArgs =>
         val minimumFallback: Int = esConf.minimumFallback
