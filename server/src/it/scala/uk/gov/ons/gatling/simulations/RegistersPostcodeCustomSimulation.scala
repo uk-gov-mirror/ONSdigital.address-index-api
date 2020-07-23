@@ -15,7 +15,7 @@ class RegistersPostcodeCustomSimulation extends Simulation {
   val baseUrl: String = ConfigLoader("baseUrl")
   val apiKey: String = ConfigLoader("apiKey")
   val numOfRequestsPerSecond: Int = ConfigLoader("requestsPerSecond") toInt
-  val requestRelPath = ConfigLoader("request_rel_path") + "?classificationfilter=workplace"
+  val requestRelPath = ConfigLoader("request_rel_path")
   val requestType = ConfigLoader("request_type")
   val requestName: String = ConfigLoader("request_name_prefix").stripSuffix(" ") + ": " + baseUrl + requestRelPath
 
@@ -44,7 +44,7 @@ class RegistersPostcodeCustomSimulation extends Simulation {
     .pause(100 millis)
     .feed(feeder)
     .exec(http("Postcode")
-      .get(requestRelPath + "${postcode}")
+      .get(requestRelPath + "${postcode}" + "?classificationfilter=workplace")
     )
 
   setUp(scn.inject(constantUsersPerSec(numOfRequestsPerSecond) during (10 minutes)))
