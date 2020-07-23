@@ -15,7 +15,7 @@ class RegistersPostcodeCustomSimulation extends Simulation {
   val baseUrl: String = ConfigLoader("baseUrl")
   val apiKey: String = ConfigLoader("apiKey")
   val numOfRequestsPerSecond: Int = ConfigLoader("requestsPerSecond") toInt
-  val requestRelPath = ConfigLoader("request_rel_path")
+  val requestRelPath = ConfigLoader("request_rel_path") + "?classificationfilter=workplace"
   val requestType = ConfigLoader("request_type")
   val requestName: String = ConfigLoader("request_name_prefix").stripSuffix(" ") + ": " + baseUrl + requestRelPath
 
