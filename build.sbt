@@ -26,8 +26,6 @@ lazy val Versions = new {
   val scapegoatVersion = "1.3.8"
 }
 
-swaggerV3 := true
-
 name := "address-index"
 scmInfo := Some(
   ScmInfo(
@@ -184,6 +182,7 @@ lazy val `address-index-server` = project.in(file("server"))
     dockerBaseImage := "openjdk:8",
     dockerCommands += ExecCmd("CMD", "-Dlogger.file=/opt/docker/conf/logback-gcp.xml"),
     routesGenerator := InjectedRoutesGenerator,
+    swaggerV3 := true,
     swaggerDomainNameSpaces := Seq("uk.gov.ons.addressIndex.model.server.response"),
     Revolver.settings ++ Seq(
       mainClass in reStart := Some("play.core.server.ProdServerStart")
