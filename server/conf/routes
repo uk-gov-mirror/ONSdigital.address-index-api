@@ -6,42 +6,68 @@ GET     /                   uk.gov.ons.addressIndex.server.controllers.general.A
 #  description: Returns a ranked list of addresses matching the search query in the specified format.
 #  parameters:
 #    - name: input
+#      schema:
+#         type: string
 #      description: Specifies the address search string (e.g. '14 Acacia Avenue, Ruislip, HA4 8RG'). Can only be blank if rangekm, lat, lon and classificationfilter are supplied in which case the underlyingScore returned is the distance in km.
 #    - name: offset
+#      schema:
+#         type: string
 #      description: Specifies the offset from zero, used for pagination.
 #      default: 0
 #      maximum: 250
 #    - name: limit
+#      schema:
+#         type: string
 #      description: Specifies the number of addresses to return.
 #      default: 10
 #      maximum: 100
 #    - name: classificationfilter
+#      schema:
+#         type: string
 #      description: Classification code filter. Can be pattern match (ZW*), exact match (RD06), multiple exact match (RD02,RD04) or a preset keyword such as residential, commercial or workplace
 #    - name: rangekm
+#      schema:
+#         type: string
 #      description: Limit results to those within this number of kilometers of point (decimal e.g. 0.1)
 #    - name: lat
+#      schema:
+#         type: string
 #      description: Latitude of point in decimal format (e.g. 50.705948).
 #    - name: lon
+#      schema:
+#         type: string
 #      description: Longitude of point in decimal format (e.g. -3.5091076).
 #    - name: historical
+#      schema:
+#         type: string
 #      description: Include historical addresses
 #      default: true
 #    - name: matchthreshold
+#      schema:
+#         type: string
 #      description: Minimum confidence score (percentage) for match to be included in results.
 #      default: 5.0
 #    - name: verbose
+#      schema:
+#         type: string
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
 #      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #    - name: fromsource
+#      schema:
+#         type: string
 #      description: Set to niboost to favour Northern Ireland results, nionly or ewonly to filter (Census index only)
 #      default: all
 #  responses:
 #    200:
 #      description: Success. A json return of matched addresses.
-#      schema:
-#        $ref: "#/definitions/uk.gov.ons.addressIndex.model.server.response.address.AddressBySearchResponseContainer"
+#      content:
+#        application/json:
+#          schema:
+#            $ref: "#/definitions/uk.gov.ons.addressIndex.model.server.response.address.AddressBySearchResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -402,7 +428,10 @@ GET     /addresses/rh/uprn/:uprn    uk.gov.ons.addressIndex.server.controllers.R
 #    200:
 #      description: Success. A json return of matched addresses.
 #      schema:
-#        $ref: "#/definitions/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQPartialAddressResponseContainer"
+#        oneOf:
+#          - $ref: "#/definitions/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQPostcodeResponseContainer"
+#          - $ref: "#/definitions/uk.gov.ons.addressIndex.model.server.response.postcode.AddressByGroupedPostcodeResponseContainer"
+#          - $ref: "#/definitions/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQPartialAddressResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
