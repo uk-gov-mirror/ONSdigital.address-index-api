@@ -408,39 +408,64 @@ GET     /addresses/partial    uk.gov.ons.addressIndex.server.controllers.Partial
 #  description: Returns a list addresses, from a partial match on the input string
 #  parameters:
 #    - name: input
+#      schema:
+#         type: string
 #      description: Specifies the address input.
 #    - name: fallback
+#      schema:
+#         type: boolean
+#         default: true
 #      description: Specifies whether a slow fallback query is used in the event of the main query returning no results.
 #    - name: offset
+#      schema:
+#         type: integer
+#         default: 0
+#         maximum: 250
 #      description: Specifies the offset from zero, used for pagination.
-#      default: 0
-#      maximum: 250
 #    - name: limit
 #      description: Specifies the number of addresses to return.
-#      default: 10
-#      maximum: 100
+#      schema:
+#         type: integer
+#         default: 10
+#         maximum: 100
 #    - name: classificationfilter
+#      schema:
+#         type: string
 #      description: Classification code filter. Can be pattern match (ZW*), exact match (RD06), multiple exact match (RD02,RD04) or a preset keyword such as residential, commercial or workplace
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include historical addresses
-#      default: false
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #    - name: fromsource
+#      schema:
+#         type: string
+#         default: all
 #      description: Set to niboost to favour Northern Ireland results, nionly or ewonly to filter (Census index only)
-#      default: all
 #    - name: highlight
+#      schema:
+#         type: string
+#         default: on
 #      description: include detailed highlighting info, options are off, on or debug
-#      default: on
 #    - name: favourpaf
+#      schema:
+#         type: boolean
+#         default: true
 #      description: paf beats nag on draw for best match
-#      default: true
 #    - name: favourwelsh
 #      description: Welsh beats English on draw for best match
-#      default: false
+#      schema:
+#         type: boolean
+#         default: false
 #  responses:
 #    200:
 #      description: Success. A json return of matched addresses.
@@ -504,16 +529,27 @@ GET     /addresses/census/uprn/:uprn    uk.gov.ons.addressIndex.server.controlle
 #  description: Returns a single address, identified by its UPRN in the custom EQ format.
 #  parameters:
 #    - name: uprn
+#      schema:
+#         type: number
+#         format: long
 #      description: Specifies the address UPRN.
 #    - name: addresstype
+#      schema:
+#         type: string
 #      description: Version of the address to return - paf, welshpaf, nag, welshnag, nisra
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: true
 #      description: Include historical addresses
-#      default: true
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #  responses:
 #    200:
@@ -540,16 +576,27 @@ GET     /addresses/eq/uprn/:uprn    uk.gov.ons.addressIndex.server.controllers.E
 #  description: Returns a single address, identified by its UPRN in the custom EQ format.
 #  parameters:
 #    - name: uprn
+#      schema:
+#         type: number
+#         format: long
 #      description: Specifies the address UPRN.
 #    - name: addresstype
+#      schema:
+#         type: string
 #      description: Version of the address to return - paf, welshpaf, nag, welshnag, nisra
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: true
 #      description: Include historical addresses
-#      default: true
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #  responses:
 #    200:
@@ -576,39 +623,64 @@ GET     /addresses/rh/uprn/:uprn    uk.gov.ons.addressIndex.server.controllers.R
 #  description: Returns a list of addresses, from either a partial or postcode match on the input string
 #  parameters:
 #    - name: input
+#      schema:
+#         type: string
 #      description: Specifies the address input.
 #    - name: fallback
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Specifies whether a slow fallback query is used in the event of the main query returning no results.
 #    - name: offset
+#      schema:
+#         type: integer
+#         default: 0
+#         maximum: 5000
 #      description: Specifies the offset from zero, used for pagination.
-#      default: 0
-#      maximum: 5000
 #    - name: limit
+#      schema:
+#         type: integer
+#         default: 100
+#         maximum: 5000
 #      description: Specifies the number of addresses to return.
-#      default: 100
-#      maximum: 5000
 #    - name: classificationfilter
+#      schema:
+#         type: string
 #      description: Classification code filter. Can be pattern match (ZW*), exact match (RD06), multiple exact match (RD02,RD04) or a preset keyword such as residential, commercial or workplace
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include historical addresses
-#      default: false
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #    - name: fromsource
+#      schema:
+#         type: string
+#         default: all
 #      description: Set to niboost to favour Northern Ireland results, nionly or ewonly to filter (Census index only)
-#      default: all
 #    - name: highlight
+#      schema:
+#         type: string
+#         default: on
 #      description: include detailed highlighting info, options are off, on or debug
-#      default: on
 #    - name: favourpaf
+#      schema:
+#         type: boolean
+#         default: true
 #      description: paf beats nag on draw for best match
-#      default: true
 #    - name: favourwelsh
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Welsh beats English on draw for best match
-#      default: false
 #  responses:
 #    200:
 #      description: Success. A json return of matched addresses.
@@ -635,24 +707,38 @@ GET     /addresses/eq    uk.gov.ons.addressIndex.server.controllers.EQController
 #  description: Returns full postcodes that match a partial postcode with a count of the number of addresses in each
 #  parameters:
 #    - name: postcode
+#      schema:
+#         type: string
 #      description: Specifies the partial postcode search string (e.g. 'HA4 8').
 #    - name: offset
+#      schema:
+#         type: integer
+#         default: 0
+#         maximum: 1000
 #      description: Specifies the offset from zero, used for pagination.
-#      default: 0
-#      maximum: 5000
 #    - name: limit
-#      description: Specifies the number of addresses to return.
-#      default: 100
-#      maximum: 5000
+#      schema:
+#         type: integer
+#         default: 100
+#         maximum: 1000
+#      description: Specifies the number of groups to return.
 #    - name: classificationfilter
+#      schema:
+#         type: string
 #      description: Classification code filter. Can be pattern match (ZW*), exact match (RD06), multiple exact match (RD02,RD04) or a preset keyword such as residential, commercial or workplace
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include historical addresses
-#      default: true
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #  responses:
 #    200:
@@ -677,24 +763,38 @@ GET     /addresses/groupedpostcode/:postcode          uk.gov.ons.addressIndex.se
 #  description: Returns a alpha-numeric ordered list of addresses matching the postcode query.
 #  parameters:
 #    - name: postcode
-#      description: Specifies the postcode search string (e.g. 'HA4 8RG').
+#      schema:
+#         type: string
+#      description: Specifies the partial postcode search string (e.g. 'HA4 8').
 #    - name: offset
+#      schema:
+#         type: integer
+#         default: 0
+#         maximum: 5000
 #      description: Specifies the offset from zero, used for pagination.
-#      default: 0
-#      maximum: 5000
 #    - name: limit
+#      schema:
+#         type: integer
+#         default: 100
+#         maximum: 5000
 #      description: Specifies the number of addresses to return.
-#      default: 100
-#      maximum: 5000
 #    - name: classificationfilter
+#      schema:
+#         type: string
 #      description: Classification code filter. Can be pattern match (ZW*), exact match (RD06), multiple exact match (RD02,RD04) or a preset keyword such as residential, commercial or workplace
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include historical addresses
-#      default: true
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #  responses:
 #    200:
@@ -716,7 +816,7 @@ GET     /addresses/postcode/:postcode          uk.gov.ons.addressIndex.server.co
 
 ### NoDocs ###
 ###
-#  summary: Custom Census UPRN endpoint. Search for an address by postcode.
+#  summary: Custom Census postcode endpoint. Search for an address by postcode.
 #  description: Returns a alpha-numeric ordered list of addresses matching the postcode query.
 #  parameters:
 #    - name: postcode
@@ -767,24 +867,38 @@ GET     /addresses/census/postcode/:postcode          uk.gov.ons.addressIndex.se
 #  description: Returns a alpha-numeric ordered list of addresses matching the postcode query.
 #  parameters:
 #    - name: postcode
-#      description: Specifies the postcode search string (e.g. 'HA4 8RG').
+#      schema:
+#         type: string
+#      description: Specifies the partial postcode search string (e.g. 'HA4 8').
 #    - name: offset
+#      schema:
+#         type: integer
+#         default: 0
+#         maximum: 5000
 #      description: Specifies the offset from zero, used for pagination.
-#      default: 0
-#      maximum: 1000
 #    - name: limit
+#      schema:
+#         type: integer
+#         default: 100
+#         maximum: 5000
 #      description: Specifies the number of addresses to return.
-#      default: 10
-#      maximum: 100
 #    - name: classificationfilter
+#      schema:
+#         type: string
 #      description: Classification code filter. Can be pattern match (ZW*), exact match (RD06), multiple exact match (RD02,RD04) or a preset keyword such as residential, commercial or workplace
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include historical addresses
-#      default: true
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #  responses:
 #    200:
@@ -809,31 +923,49 @@ GET     /addresses/rh/postcode/:postcode          uk.gov.ons.addressIndex.server
 #  description: Performs a wildcard search using postcode, street and town concatenated. Asterisk symbols can be used for wildcarding.
 #  parameters:
 #    - name: postcode
+#      schema:
+#         type: string
+#         default: "*"
 #      description: Specifies the postcode part of the bucket (e.g. 'HA4 8RG').
-#      default: "*"
 #    - name: streetname
+#      schema:
+#         type: string
+#         default: "*"
 #      description: Specifies the street part of the bucket (e.g. 'Acacia Avenue').
-#      default: "*"
 #    - name: townname
+#      schema:
+#         type: string
+#         default: "*"
 #      description: Specifies the town part of the bucket (e.g. 'Ruislip').
-#      default: "*"
 #    - name: offset
+#      schema:
+#         type: integer
+#         default: 0
+#         maximum: 1000
 #      description: Specifies the offset from zero, used for pagination.
-#      default: 0
-#      maximum: 1000
 #    - name: limit
+#      schema:
+#         type: integer
+#         default: 10
+#         maximum: 100
 #      description: Specifies the number of addresses to return.
-#      default: 10
-#      maximum: 100
 #    - name: classificationfilter
+#      schema:
+#         type: string
 #      description: Classification code filter. Can be pattern match (ZW*), exact match (RD06), multiple exact match (RD02,RD04) or a preset keyword such as residential, commercial or workplace
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include historical addresses
-#      default: true
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #  responses:
 #    200:
@@ -861,22 +993,34 @@ GET     /addresses/eq/bucket          uk.gov.ons.addressIndex.server.controllers
 #  description: Returns a random address.
 #  parameters:
 #    - name: classificationfilter
+#      schema:
+#         type: string
 #      description: Classification code filter. Can be pattern match (ZW*), exact match (RD06), multiple exact match (RD02,RD04) or a preset keyword such as residential, commercial or workplace
 #    - name: limit
+#      schema:
+#         type: integer
+#         default: 1
+#         maximum: 100
 #      description: Specifies the number of addresses to return.
-#      default: 1
-#      maximum: 100
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include historical addresses
-#      default: true
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #    - name: fromsource
+#      schema:
+#         type: string
+#         default: all
 #      description: Set to nionly or ewonly to filter Northern Ireland addresses (Census index only)
-#      default: all
 #  responses:
 #    200:
 #      description: Success. A json return of matched addresses.
@@ -921,14 +1065,21 @@ GET     /version            uk.gov.ons.addressIndex.server.controllers.VersionCo
 #  description: Will process all `BulkQuery` items in the `BulkBody` returns reduced information on found addresses (uprn, formatted address).
 #  parameters:
 #    - name: limitperaddress
+#      schema:
+#         type: integer
+#         default: 5
 #      description: Specifies the maximum number of matches to return per address.
-#      default: 5
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: true
 #      description: Include historical addresses
-#      default: true
 #    - name: matchthreshold
+#      schema:
+#         type: number
+#         format: decimal
+#         default: 10.0
 #      description: Minimum confidence score (percentage) for match to be included in results.
-#      default: 10.0
 #  responses:
 #    200:
 #      description: Success. A json return of matched addresses.
@@ -953,14 +1104,21 @@ POST    /bulk               uk.gov.ons.addressIndex.server.controllers.BatchCont
 #               since all the information on found addresses is returned.
 #  parameters:
 #    - name: limitperaddress
+#      schema:
+#         type: integer
+#         default: 5
 #      description: Specifies the maximum number of matches to return per address.
-#      default: 5
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: true
 #      description: Include historical addresses
-#      default: true
 #    - name: matchthreshold
+#      schema:
+#         type: number
+#         format: decimal
+#         default: 10.0
 #      description: Minimum confidence score (percentage) for match to be included in results.
-#      default: 10.0
 #  responses:
 #    200:
 #      description: Success. A json return of matched addresses.
