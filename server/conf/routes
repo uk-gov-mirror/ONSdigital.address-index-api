@@ -84,6 +84,7 @@ GET     /                   uk.gov.ons.addressIndex.server.controllers.general.A
 ###
 GET     /addresses          uk.gov.ons.addressIndex.server.controllers.AddressController.addressQuery(input, offset: Option[String], limit: Option[String], classificationfilter: Option[String], rangekm: Option[String], lat: Option[String], lon: Option[String], historical: Option[String], matchthreshold: Option[String], verbose: Option[String], epoch: Option[String], fromsource: Option[String], includeauxiliarysearch: Boolean = false)
 
+### NoDocs ###
 ###
 #  summary: Custom Census Address endpoint. Search for an address.
 #  description: Returns a ranked list of addresses matching the search query in the specified format.
@@ -170,7 +171,7 @@ GET     /addresses          uk.gov.ons.addressIndex.server.controllers.AddressCo
 #      description: Internal server error. Failed to process the request due to an internal error.
 #
 ###
-GET     /addresses/census          uk.gov.ons.addressIndex.server.controllers.AddressController.addressQuery(input, offset: Option[String], limit: Option[String], classificationfilter: Option[String], rangekm: Option[String], lat: Option[String], lon: Option[String], historical: Option[String], matchthreshold: Option[String], verbose: Option[String], epoch: Option[String], fromsource: Option[String], includeauxiliarysearch: Boolean = true)
+GET     /addresses/census          uk.gov.ons.addressIndex.server.controllers.AddressController.addressQuery(input, offset: Option[String], limit: Option[String], classificationfilter: Option[String], rangekm: Option[String], lat: Option[String], lon: Option[String], historical: Option[String], matchthreshold: Option[String], verbose: Option[String], epoch: Option[String], fromsource: Option[String], includeauxiliarysearch: Boolean)
 
 ###
 #  summary: Return a list of codelists supported by the API
@@ -180,8 +181,8 @@ GET     /addresses/census          uk.gov.ons.addressIndex.server.controllers.Ad
 #      description: Success. A json return of available codelists.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.codelists.AddressResponseCodelistListContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.codelists.AddressResponseCodelistListContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -202,8 +203,8 @@ GET     /codelists             uk.gov.ons.addressIndex.server.controllers.Codeli
 #      description: Success. A json return of external source codes.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.address.AddressResponseSourceListContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.address.AddressResponseSourceListContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -223,8 +224,8 @@ GET     /sources             uk.gov.ons.addressIndex.server.controllers.Codelist
 #      description: Success. A json return of available classification codes.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.address.AddressResponseClassificationListContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.address.AddressResponseClassificationListContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -244,8 +245,8 @@ GET     /classifications     uk.gov.ons.addressIndex.server.controllers.Codelist
 #      description: Success. A json return of address base custodian codes to local authority matches.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.address.AddressResponseCustodianListContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.address.AddressResponseCustodianListContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -265,8 +266,8 @@ GET     /custodians          uk.gov.ons.addressIndex.server.controllers.Codelist
 #      description: Success. A json return of valid statuses for the lpiLogicalStatus.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.address.AddressResponseLogicalStatusListContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.address.AddressResponseLogicalStatusListContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -283,22 +284,31 @@ GET     /logicalstatuses      uk.gov.ons.addressIndex.server.controllers.Codelis
 #  description: Returns a single address, identified by its UPRN.
 #  parameters:
 #    - name: uprn
+#      schema:
+#         type: number
+#         format: long
 #      description: Specifies the address UPRN.
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: true
 #      description: Include historical addresses
-#      default: true
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
-#      description: Select a specific AddressBase Epoch to search.
+#      schema:
+#         type: string
+#      description: Select a specific AddressBase Epoch to search (latest if not supplied).
 #  responses:
 #    200:
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.uprn.AddressByUprnResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.uprn.AddressByUprnResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -317,46 +327,71 @@ GET     /addresses/uprn/:uprn    uk.gov.ons.addressIndex.server.controllers.UPRN
 #  description: Returns a list addresses, from a partial match on the input string
 #  parameters:
 #    - name: input
+#      schema:
+#         type: string
 #      description: Specifies the address input.
 #    - name: fallback
+#      schema:
+#         type: boolean
+#         default: true
 #      description: Specifies whether a slow fallback query is used in the event of the main query returning no results.
 #    - name: offset
+#      schema:
+#         type: integer
+#         default: 0
+#         maximum: 250
 #      description: Specifies the offset from zero, used for pagination.
-#      default: 0
-#      maximum: 250
 #    - name: limit
 #      description: Specifies the number of addresses to return.
-#      default: 10
-#      maximum: 100
+#      schema:
+#         type: integer
+#         default: 10
+#         maximum: 100
 #    - name: classificationfilter
+#      schema:
+#         type: string
 #      description: Classification code filter. Can be pattern match (ZW*), exact match (RD06), multiple exact match (RD02,RD04) or a preset keyword such as residential, commercial or workplace
 #    - name: historical
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include historical addresses
-#      default: false
 #    - name: verbose
+#      schema:
+#         type: boolean
+#         default: false
 #      description: Include the full address details in the response (including relatives, crossRefs, paf and nag).
-#      default: false
 #    - name: epoch
+#      schema:
+#         type: string
 #      description: Select a specific AddressBase Epoch to search.
 #    - name: fromsource
+#      schema:
+#         type: string
+#         default: all
 #      description: Set to niboost to favour Northern Ireland results, nionly or ewonly to filter (Census index only)
-#      default: all
 #    - name: highlight
+#      schema:
+#         type: string
+#         default: on
 #      description: include detailed highlighting info, options are off, on or debug
-#      default: on
 #    - name: favourpaf
+#      schema:
+#         type: boolean
+#         default: true
 #      description: paf beats nag on draw for best match
-#      default: true
 #    - name: favourwelsh
 #      description: Welsh beats English on draw for best match
-#      default: false
+#      schema:
+#         type: boolean
+#         default: false
 #  responses:
 #    200:
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.partialaddress.AddressByPartialAddressResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.partialaddress.AddressByPartialAddressResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -411,8 +446,8 @@ GET     /addresses/partial    uk.gov.ons.addressIndex.server.controllers.Partial
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.rh.AddressByRHPartialAddressResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.rh.AddressByRHPartialAddressResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -424,6 +459,7 @@ GET     /addresses/partial    uk.gov.ons.addressIndex.server.controllers.Partial
 ###
 GET     /addresses/rh/partial    uk.gov.ons.addressIndex.server.controllers.RHPartialAddressController.partialAddressQueryRH(input, fallback: Option[String], offset: Option[String], limit: Option[String], classificationfilter: Option[String], historical: Option[String], verbose: Option[String], epoch: Option[String], fromsource: Option[String], highlight: Option[String], favourpaf: Option[String], favourwelsh: Option[String])
 
+### NoDocs ###
 ###
 #  summary: Custom Census UPRN endpoint. Gets an address by UPRN.
 #  description: Returns a single address, identified by its UPRN.
@@ -438,13 +474,18 @@ GET     /addresses/rh/partial    uk.gov.ons.addressIndex.server.controllers.RHPa
 #      default: false
 #    - name: epoch
 #      description: Select a specific AddressBase Epoch to search.
+#    - name: includeauxiliarysearch
+#      schema:
+#         type: boolean
+#         default: true
+#      description: flag to tell API to look in auxiliary index
 #  responses:
 #    200:
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/definitions/uk.gov.ons.addressIndex.model.server.response.uprn.AddressByUprnResponseContainer"
+#          schema:
+#            $ref: "#/definitions/uk.gov.ons.addressIndex.model.server.response.uprn.AddressByUprnResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -456,7 +497,7 @@ GET     /addresses/rh/partial    uk.gov.ons.addressIndex.server.controllers.RHPa
 #    500:
 #      description: Internal server error. Failed to process the request due to an internal error.
 ###
-GET     /addresses/census/uprn/:uprn    uk.gov.ons.addressIndex.server.controllers.UPRNController.uprnQuery(uprn, historical: Option[String], verbose: Option[String], epoch: Option[String], includeauxiliarysearch: Boolean = true)
+GET     /addresses/census/uprn/:uprn    uk.gov.ons.addressIndex.server.controllers.UPRNController.uprnQuery(uprn, historical: Option[String], verbose: Option[String], epoch: Option[String], includeauxiliarysearch: Boolean)
 
 ###
 #  summary: Custom EQ UPRN endpoint. Gets an address by UPRN.
@@ -479,8 +520,8 @@ GET     /addresses/census/uprn/:uprn    uk.gov.ons.addressIndex.server.controlle
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQUprnResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQUprnResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -515,8 +556,8 @@ GET     /addresses/eq/uprn/:uprn    uk.gov.ons.addressIndex.server.controllers.E
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.rh.AddressByRHUprnResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.rh.AddressByRHUprnResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -573,11 +614,11 @@ GET     /addresses/rh/uprn/:uprn    uk.gov.ons.addressIndex.server.controllers.R
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          oneOf:
-#            - $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQPostcodeResponseContainer"
-#            - $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.postcode.AddressByGroupedPostcodeResponseContainer"
-#            - $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQPartialAddressResponseContainer"
+#          schema:
+#            oneOf:
+#              - $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQPostcodeResponseContainer"
+#              - $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.postcode.AddressByGroupedPostcodeResponseContainer"
+#              - $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQPartialAddressResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -618,8 +659,8 @@ GET     /addresses/eq    uk.gov.ons.addressIndex.server.controllers.EQController
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.postcode.AddressByGroupedPostcodeResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.postcode.AddressByGroupedPostcodeResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -660,8 +701,8 @@ GET     /addresses/groupedpostcode/:postcode          uk.gov.ons.addressIndex.se
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.postcode.AddressByPostcodeResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.postcode.AddressByPostcodeResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -673,6 +714,7 @@ GET     /addresses/groupedpostcode/:postcode          uk.gov.ons.addressIndex.se
 ###
 GET     /addresses/postcode/:postcode          uk.gov.ons.addressIndex.server.controllers.PostcodeController.postcodeQuery(postcode, offset: Option[String], limit: Option[String], classificationfilter: Option[String], historical: Option[String], verbose: Option[String], epoch: Option[String], includeauxiliarysearch: Boolean = false)
 
+### NoDocs ###
 ###
 #  summary: Custom Census UPRN endpoint. Search for an address by postcode.
 #  description: Returns a alpha-numeric ordered list of addresses matching the postcode query.
@@ -697,13 +739,18 @@ GET     /addresses/postcode/:postcode          uk.gov.ons.addressIndex.server.co
 #      default: false
 #    - name: epoch
 #      description: Select a specific AddressBase Epoch to search.
+#    - name: includeauxiliarysearch
+#      schema:
+#         type: boolean
+#         default: true
+#      description: flag to tell API to look in auxiliary index
 #  responses:
 #    200:
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/definitions/uk.gov.ons.addressIndex.model.server.response.postcode.AddressByPostcodeResponseContainer"
+#          schema:
+#            $ref: "#/definitions/uk.gov.ons.addressIndex.model.server.response.postcode.AddressByPostcodeResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -713,7 +760,7 @@ GET     /addresses/postcode/:postcode          uk.gov.ons.addressIndex.server.co
 #    500:
 #      description: Internal server error. Failed to process the request due to an internal error.
 ###
-GET     /addresses/census/postcode/:postcode          uk.gov.ons.addressIndex.server.controllers.PostcodeController.postcodeQuery(postcode, offset: Option[String], limit: Option[String], classificationfilter: Option[String], historical: Option[String], verbose: Option[String], epoch: Option[String], includeauxiliarysearch: Boolean = true)
+GET     /addresses/census/postcode/:postcode          uk.gov.ons.addressIndex.server.controllers.PostcodeController.postcodeQuery(postcode, offset: Option[String], limit: Option[String], classificationfilter: Option[String], historical: Option[String], verbose: Option[String], epoch: Option[String], includeauxiliarysearch: Boolean)
 
 ###
 #  summary: Search for an address by postcode. RH version
@@ -744,8 +791,8 @@ GET     /addresses/census/postcode/:postcode          uk.gov.ons.addressIndex.se
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.rh.AddressByRHPostcodeResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.rh.AddressByRHPostcodeResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -793,8 +840,8 @@ GET     /addresses/rh/postcode/:postcode          uk.gov.ons.addressIndex.server
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQBucketResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.eq.AddressByEQBucketResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -835,8 +882,8 @@ GET     /addresses/eq/bucket          uk.gov.ons.addressIndex.server.controllers
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.random.AddressByRandomResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.random.AddressByRandomResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -856,8 +903,8 @@ GET     /addresses/random          uk.gov.ons.addressIndex.server.controllers.Ra
 #      description: Success. A json return of version information.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.address.AddressResponseVersion"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.address.AddressResponseVersion"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -887,8 +934,8 @@ GET     /version            uk.gov.ons.addressIndex.server.controllers.VersionCo
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/AddressBulkResponse"
+#          schema:
+#            $ref: "#/components/schemas/AddressBulkResponse"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -919,8 +966,8 @@ POST    /bulk               uk.gov.ons.addressIndex.server.controllers.BatchCont
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.bulk.AddressBulkResponseContainer"
+#          schema:
+#            $ref: "#/components/schemas/uk.gov.ons.addressIndex.model.server.response.bulk.AddressBulkResponseContainer"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
@@ -997,8 +1044,8 @@ GET     /query-debug        uk.gov.ons.addressIndex.server.controllers.DebugCont
 #      description: Success. A json return of matched addresses.
 #      content:
 #        application/json:
-#        schema:
-#          $ref: "#/components/schemas/AddressBulkResponse"
+#          schema:
+#            $ref: "#/components/schemas/AddressBulkResponse"
 #    400:
 #      description: Bad request. Indicates an issue with the request. Further details are provided in the response.
 #    401:
