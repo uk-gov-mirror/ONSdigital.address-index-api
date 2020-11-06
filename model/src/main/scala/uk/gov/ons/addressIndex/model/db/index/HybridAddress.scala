@@ -87,7 +87,8 @@ object HybridAddress {
       val slist = sorts.getOrElse(Seq())
       val centimetre = if (slist.isEmpty) 0 else 0.01
       val eWDistance = Try(slist.lift(0).get.toString.toDouble).getOrElse(0D)
-      val isPartial = (eWDistance == hit.score)
+      val testScore = Try(hit.score.toString.toDouble).getOrElse(0D)
+      val isPartial = (eWDistance == testScore)
       val niDistance = Try(slist.lift(1).get.toString.toDouble).getOrElse(0D)
       val testUPRN = Try(slist.lift(1).get.toString.toLong).getOrElse(0L)
       val bestDistance = if (isPartial || testUPRN != 0) 0D
