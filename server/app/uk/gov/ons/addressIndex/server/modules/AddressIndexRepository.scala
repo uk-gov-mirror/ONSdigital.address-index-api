@@ -249,8 +249,8 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
       .query(
           functionScoreQuery(query).functions(
           scriptScore(partialScript))
-   //         .boostMode("replace").minScore(5)
-            .boostMode("replace")
+            .boostMode("replace").minScore(8)
+   //         .boostMode("replace")
 //query
       )
       .highlighting(hOpts,hFields)
