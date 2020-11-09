@@ -210,44 +210,47 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
     val englishPafScore: Int = 1 + englishBoost + pafBoost
     val welshPafScore: Int = 1 + welshBoost + pafBoost
 
-    val scriptText: String =  "(_score < 5)? 0: Math.round((_score " +
-      "+ Math.max(((doc['lpi.mixedNagStart'].size() > 0 && doc['lpi.mixedNagStart'].value.toLowerCase().startsWith(params.input.toLowerCase()) " +
-    "|| doc['lpi.mixedNagStart'].size() > 1 && doc['lpi.mixedNagStart'].get(1).toLowerCase().startsWith(params.input.toLowerCase()))? " +
-    englishNagScore + " : 0), " +
-      "+ ((doc['lpi.mixedWelshNagStart'].size() > 0 && doc['lpi.mixedWelshNagStart'].value.toLowerCase().startsWith(params.input.toLowerCase()) " +
-    "|| doc['lpi.mixedWelshNagStart'].size() > 1 && doc['lpi.mixedWelshNagStart'].get(1).toLowerCase().startsWith(params.input.toLowerCase()))? " +
-    welshNagScore + " : 0)) " +
-      "+ Math.max(((doc['paf.mixedPafStart'].size() > 0 && doc['paf.mixedPafStart'].value.toLowerCase().startsWith(params.input.toLowerCase()))? " +
-      englishPafScore + " : 0), " +
-      "+ ((doc['paf.mixedWelshPafStart'].size() > 0 && doc['paf.mixedWelshPafStart'].value.toLowerCase().startsWith(params.input.toLowerCase()))? " +
-      welshPafScore + " : 0)) " +
-      "+ Math.max(((doc['lpi.mixedNagStart'].size() > 0 && doc['lpi.mixedNagStart'].value.toLowerCase().startsWith(params.inputshort.toLowerCase()) " +
-    "|| doc['lpi.mixedNagStart'].size() > 1 && doc['lpi.mixedNagStart'].get(1).toLowerCase().startsWith(params.inputshort.toLowerCase()))? " +
-    englishNagScore + " : 0), " +
-      "+ ((doc['lpi.mixedWelshNagStart'].size() > 0 && doc['lpi.mixedWelshNagStart'].value.toLowerCase().startsWith(params.inputshort.toLowerCase()) " +
-    "|| doc['lpi.mixedWelshNagStart'].size() > 1 && doc['lpi.mixedWelshNagStart'].get(1).toLowerCase().startsWith(params.inputshort.toLowerCase()))? " +
-    welshNagScore + " : 0)) " +
-      "+ Math.max(((doc['paf.mixedPafStart'].size() > 0 && doc['paf.mixedPafStart'].value.toLowerCase().startsWith(params.inputshort.toLowerCase()))? " +
-      englishPafScore + " : 0), " +
-      "+ ((doc['paf.mixedWelshPafStart'].size() > 0 && doc['paf.mixedWelshPafStart'].value.toLowerCase().startsWith(params.inputshort.toLowerCase()))? " +
-      welshPafScore + " : 0)) " +
-      "+ ((doc['nisra.mixedNisraStart'].size() > 0 && doc['nisra.mixedNisraStart'].value.toLowerCase().startsWith(params.input.toLowerCase()))? 4 : 0)" +
-      "+ ((doc['nisra.mixedNisraStart'].size() > 0 && doc['nisra.mixedNisraStart'].value.toLowerCase().startsWith(params.inputshort.toLowerCase()))? 4 : 0)) /2)"
+    val scriptText: String = "Math.round(_score)"
 
-
-    val scriptParams: Map[String,Any] = Map(
-      "input" -> args.input.replaceAll(",","").replaceAll("'","").take(12),
-      "inputshort" -> args.input.replaceAll(",","").replaceAll("'","").take(6),
-    )
-    val partialScript: Script = new Script(script = scriptText, params = scriptParams )
+//    val scriptText: String =  "(_score < 5)? 0: Math.round((_score " +
+//      "+ Math.max(((doc['lpi.mixedNagStart'].size() > 0 && doc['lpi.mixedNagStart'].value.toLowerCase().startsWith(params.input.toLowerCase()) " +
+//    "|| doc['lpi.mixedNagStart'].size() > 1 && doc['lpi.mixedNagStart'].get(1).toLowerCase().startsWith(params.input.toLowerCase()))? " +
+//    englishNagScore + " : 0), " +
+//      "+ ((doc['lpi.mixedWelshNagStart'].size() > 0 && doc['lpi.mixedWelshNagStart'].value.toLowerCase().startsWith(params.input.toLowerCase()) " +
+//    "|| doc['lpi.mixedWelshNagStart'].size() > 1 && doc['lpi.mixedWelshNagStart'].get(1).toLowerCase().startsWith(params.input.toLowerCase()))? " +
+//    welshNagScore + " : 0)) " +
+//      "+ Math.max(((doc['paf.mixedPafStart'].size() > 0 && doc['paf.mixedPafStart'].value.toLowerCase().startsWith(params.input.toLowerCase()))? " +
+//      englishPafScore + " : 0), " +
+//      "+ ((doc['paf.mixedWelshPafStart'].size() > 0 && doc['paf.mixedWelshPafStart'].value.toLowerCase().startsWith(params.input.toLowerCase()))? " +
+//      welshPafScore + " : 0)) " +
+//      "+ Math.max(((doc['lpi.mixedNagStart'].size() > 0 && doc['lpi.mixedNagStart'].value.toLowerCase().startsWith(params.inputshort.toLowerCase()) " +
+//    "|| doc['lpi.mixedNagStart'].size() > 1 && doc['lpi.mixedNagStart'].get(1).toLowerCase().startsWith(params.inputshort.toLowerCase()))? " +
+//    englishNagScore + " : 0), " +
+//      "+ ((doc['lpi.mixedWelshNagStart'].size() > 0 && doc['lpi.mixedWelshNagStart'].value.toLowerCase().startsWith(params.inputshort.toLowerCase()) " +
+//    "|| doc['lpi.mixedWelshNagStart'].size() > 1 && doc['lpi.mixedWelshNagStart'].get(1).toLowerCase().startsWith(params.inputshort.toLowerCase()))? " +
+//    welshNagScore + " : 0)) " +
+//      "+ Math.max(((doc['paf.mixedPafStart'].size() > 0 && doc['paf.mixedPafStart'].value.toLowerCase().startsWith(params.inputshort.toLowerCase()))? " +
+//      englishPafScore + " : 0), " +
+//      "+ ((doc['paf.mixedWelshPafStart'].size() > 0 && doc['paf.mixedWelshPafStart'].value.toLowerCase().startsWith(params.inputshort.toLowerCase()))? " +
+//      welshPafScore + " : 0)) " +
+//      "+ ((doc['nisra.mixedNisraStart'].size() > 0 && doc['nisra.mixedNisraStart'].value.toLowerCase().startsWith(params.input.toLowerCase()))? 4 : 0)" +
+//      "+ ((doc['nisra.mixedNisraStart'].size() > 0 && doc['nisra.mixedNisraStart'].value.toLowerCase().startsWith(params.inputshort.toLowerCase()))? 4 : 0)) /2)"
+//
+//
+//    val scriptParams: Map[String,Any] = Map(
+//      "input" -> args.input.replaceAll(",","").replaceAll("'","").take(12),
+//      "inputshort" -> args.input.replaceAll(",","").replaceAll("'","").take(6),
+//    )
+//    val partialScript: Script = new Script(script = scriptText, params = scriptParams )
+    val partialScript: Script = new Script(script = scriptText)
     val hOpts = new HighlightOptions(numOfFragments=Some(0))
 
     search(source + args.epochParam)
       .query(
-//          functionScoreQuery(query).functions(
-//          scriptScore(partialScript))
-//            .boostMode("replace").minScore(5)
-query
+          functionScoreQuery(query).functions(
+          scriptScore(partialScript))
+            .boostMode("replace").minScore(5)
+//query
       )
       .highlighting(hOpts,hFields)
       .sortBy(
