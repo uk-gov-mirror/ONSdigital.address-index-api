@@ -247,11 +247,11 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
 
     search(source + args.epochParam)
       .query(
-          functionScoreQuery(query).functions(
-          scriptScore(partialScript))
-            .boostMode("replace").minScore(8)
+   //       functionScoreQuery(query).functions(
+    //      scriptScore(partialScript))
+   //         .boostMode("replace").minScore(8)
    //         .boostMode("replace")
-//query
+query
       )
       .highlighting(hOpts,hFields)
       .sortBy(
