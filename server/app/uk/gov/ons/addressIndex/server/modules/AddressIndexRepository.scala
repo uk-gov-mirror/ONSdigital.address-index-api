@@ -188,8 +188,8 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
     val startQuery = Seq(
       prefixQuery("lpi.mixedNagStart",shortInput).boost(1),
       prefixQuery("lpi.mixedWelshNagStart",shortInput).boost(1),
-      prefixQuery("paf.mixedPafStart",shortInput).boost(1),
-      prefixQuery("paf.mixedWelshPafStart",shortInput).boost(1),
+      prefixQuery("paf.mixedPafStart",shortInput).boost(0.5),
+      prefixQuery("paf.mixedWelshPafStart",shortInput).boost(0.5),
       prefixQuery("nisra.mixedNisraStart",shortInput).boost(2))
 
     val query = must(queryWithMatchType).filter(args.queryFilter ++ fromSourceQueryMust)
