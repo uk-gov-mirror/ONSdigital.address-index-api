@@ -258,7 +258,7 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
       .query(
           functionScoreQuery(query).functions(
          scriptScore(partialScript))
-            .boostMode("replace").minScore(4)
+            .boostMode("replace").minScore(2)
             .boostMode("replace")
 //query
       )
@@ -1192,8 +1192,8 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
   override def runMultiResultQuery(args: MultiResultArgs): Future[HybridAddressCollection] = {
     val query = makeQuery(args)
  // uncomment to see generated query
-    val searchString = SearchBodyBuilderFn(query).string()
-    println(searchString)
+ //   val searchString = SearchBodyBuilderFn(query).string()
+  //  println(searchString)
     args match {
       case partialArgs: PartialArgs =>
         val minimumFallback: Int = esConf.minimumFallback
