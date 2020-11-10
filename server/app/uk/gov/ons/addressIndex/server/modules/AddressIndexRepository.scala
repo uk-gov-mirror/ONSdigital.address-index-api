@@ -182,10 +182,19 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
         ))
       case _ => Seq.empty
     }
+// Note that the mixedNagStart and similar fields should be changed to text from keyword for case insensitivity (this will also reduce the size of the index)
+    val shortInput = args.input.take(12).toLowerCase.split(" ").map(_.capitalize).mkString(" ")
+
+    val startQuery = Seq(
+      prefixQuery("lpi.mixedNagStart",shortInput).boost(1),
+      prefixQuery("lpi.mixedWelshNagStart",shortInput).boost(1),
+      prefixQuery("paf.mixedPafStart",shortInput).boost(1),
+      prefixQuery("paf.mixedWelshPafStart",shortInput).boost(1),
+      prefixQuery("nisra.mixedNisraStart",shortInput).boost(2))
 
     val query = must(queryWithMatchType).filter(args.queryFilter ++ fromSourceQueryMust)
       .not(fromSourceQueryMustNot5)
-      .should(numberQuery ++ fromSourceQueryShould)
+      .should(numberQuery ++ fromSourceQueryShould ++ startQuery)
 
     val source = if (args.historical) {
       if (args.verbose) hybridIndexHistoricalPartial else hybridIndexHistoricalSkinnyPartial
@@ -247,11 +256,11 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
 
     search(source + args.epochParam)
       .query(
-   //       functionScoreQuery(query).functions(
-    //      scriptScore(partialScript))
-   //         .boostMode("replace").minScore(8)
-   //         .boostMode("replace")
-query
+          functionScoreQuery(query).functions(
+         scriptScore(partialScript))
+            .boostMode("replace").minScore(4)
+            .boostMode("replace")
+//query
       )
       .highlighting(hOpts,hFields)
       .sortBy(
@@ -1183,8 +1192,8 @@ query
   override def runMultiResultQuery(args: MultiResultArgs): Future[HybridAddressCollection] = {
     val query = makeQuery(args)
  // uncomment to see generated query
- //   val searchString = SearchBodyBuilderFn(query).string()
- //   println(searchString)
+    val searchString = SearchBodyBuilderFn(query).string()
+    println(searchString)
     args match {
       case partialArgs: PartialArgs =>
         val minimumFallback: Int = esConf.minimumFallback
