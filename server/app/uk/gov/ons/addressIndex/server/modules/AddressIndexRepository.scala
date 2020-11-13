@@ -219,7 +219,7 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
       .query(
           functionScoreQuery(query).functions(
           scriptScore(partialScript))
-            .boostMode("replace").minScore(1)
+            .boostMode("replace").minScore(3)
       )
       .highlighting(hOpts,hFields)
       .sortBy(
@@ -233,6 +233,7 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
         FieldSort("uprn").asc())
       .start(args.start)
       .limit(args.limit)
+      .size(1000)
   }
 
   def confidenceSort(score: Float): Int =
@@ -1151,8 +1152,8 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
   override def runMultiResultQuery(args: MultiResultArgs): Future[HybridAddressCollection] = {
     val query = makeQuery(args)
  // uncomment to see generated query
- //   val searchString = SearchBodyBuilderFn(query).string()
- //   println(searchString)
+    val searchString = SearchBodyBuilderFn(query).string()
+    println(searchString)
     args match {
       case partialArgs: PartialArgs =>
         val minimumFallback: Int = esConf.minimumFallback
