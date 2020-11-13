@@ -233,7 +233,6 @@ class AddressIndexRepository @Inject()(conf: ConfigModule,
         FieldSort("uprn").asc())
       .start(args.start)
       .limit(args.limit)
-      .size(1000)
   }
 
   def confidenceSort(score: Float): Int =
