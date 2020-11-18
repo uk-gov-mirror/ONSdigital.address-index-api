@@ -104,9 +104,10 @@ class RHUPRNController @Inject()(val controllerComponents: ControllerComponents,
           epoch = epochVal,
         )
 
-        val request: Future[Option[HybridAddress]] = overloadProtection.breaker.withCircuitBreaker(
-          esRepo.runUPRNQuery(args)
-        )
+        val request: Future[Option[HybridAddress]] =
+          //overloadProtection.breaker.withCircuitBreaker(
+            esRepo.runUPRNQuery(args)
+          //)
 
         request.map {
           case Some(hybridAddress) =>

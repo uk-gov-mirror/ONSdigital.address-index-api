@@ -133,9 +133,9 @@ class EQBucketController @Inject()(val controllerComponents: ControllerComponent
         )
 
         val request: Future[HybridAddressCollection] =
-          overloadProtection.breaker.withCircuitBreaker(
+          //overloadProtection.breaker.withCircuitBreaker(
             esRepo.runMultiResultQuery(args)
-          )
+          //)
 
         request.map {
           case HybridAddressCollection(hybridAddresses, aggregations@_, maxScore, total) =>

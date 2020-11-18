@@ -198,7 +198,9 @@ class AddressController @Inject()(val controllerComponents: ControllerComponents
         )
 
         val request: Future[HybridAddressCollection] =
-          overloadProtection.breaker.withCircuitBreaker(esRepo.runMultiResultQuery(finalArgs))
+          //overloadProtection.breaker.withCircuitBreaker(
+            esRepo.runMultiResultQuery(finalArgs)
+          //)
 
         request.map {
           case HybridAddressCollection(hybridAddresses, aggregations@_, maxScore, total@_) =>
