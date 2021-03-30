@@ -2,6 +2,7 @@ package uk.gov.ons.addressIndex.server.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
+import java.io._
 import play.api.mvc._
 import retry.Success
 import uk.gov.ons.addressIndex.model.db.index.HybridAddress
@@ -12,8 +13,11 @@ import uk.gov.ons.addressIndex.server.modules.response.UPRNControllerResponse
 import uk.gov.ons.addressIndex.server.modules.validation.UPRNControllerValidation
 import uk.gov.ons.addressIndex.server.modules.{ConfigModule, ElasticsearchRepository, VersionModule, _}
 import uk.gov.ons.addressIndex.server.utils.{APIThrottle, AddressAPILogger}
+
 import scala.concurrent.duration.DurationInt
 import odelay.Timer.default
+import play.api.libs.Files
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NonFatal
@@ -109,6 +113,26 @@ class RHUPRNController @Inject()(val controllerComponents: ControllerComponents,
         if (newdata != None) {
 
           val newAddress = AddressByRHUprnResponse.fromInput(newdata.getOrElse(""), addressType)
+
+          val myJson = Json.toJson(AddressByRHUprnResponseContainer(
+            apiVersion = apiVersion,
+            dataVersion = dataVersion,
+            response = AddressByRHUprnResponse(
+              address = Some(newAddress),
+              addressType = addressType,
+              epoch = epochVal
+            ),
+              status = OkAddressResponseStatus
+          ))
+
+          val newuprn = newdata.getOrElse(",").split(",")(0) + ".json"
+
+          import java.io.FileWriter
+          import java.io.PrintWriter
+          val fileWriter: FileWriter = new FileWriter(newuprn)
+          val printWriter: PrintWriter = new PrintWriter(fileWriter)
+          printWriter.print(myJson)
+          printWriter.close
 
           Future(jsonOk(
             AddressByRHUprnResponseContainer(
