@@ -1,0 +1,398 @@
+{
+  "apiVersion": "1.0.0-SNAPSHOT",
+  "dataVersion": "80",
+  "response": {
+    "postcode": "PO12EE",
+    "addresses": [
+      {
+        "uprn": "9001000297977",
+        "formattedAddress": "Hello Student, 9, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110042
+      },
+      {
+        "uprn": "9001000297978",
+        "formattedAddress": "Hello Student, 10, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110041
+      },
+      {
+        "uprn": "9001000297979",
+        "formattedAddress": "Hello Student, 12, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110040
+      },
+      {
+        "uprn": "9001000297980",
+        "formattedAddress": "Hello Student, 20, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110039
+      },
+      {
+        "uprn": "9001000297981",
+        "formattedAddress": "Hello Student, 1, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110038
+      },
+      {
+        "uprn": "9001000297982",
+        "formattedAddress": "Hello Student, 2, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110037
+      },
+      {
+        "uprn": "9001000297983",
+        "formattedAddress": "Hello Student, 3, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110036
+      },
+      {
+        "uprn": "9001000297984",
+        "formattedAddress": "Hello Student, 4, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110035
+      },
+      {
+        "uprn": "9001000297985",
+        "formattedAddress": "Hello Student, 5, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110034
+      },
+      {
+        "uprn": "9001000297986",
+        "formattedAddress": "Hello Student, 8, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110033
+      },
+      {
+        "uprn": "9001000297987",
+        "formattedAddress": "Hello Student, 11, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110032
+      },
+      {
+        "uprn": "9001000297988",
+        "formattedAddress": "Hello Student, 13, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110031
+      },
+      {
+        "uprn": "9001000297989",
+        "formattedAddress": "Hello Student, 17, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110030
+      },
+      {
+        "uprn": "9001000297990",
+        "formattedAddress": "Hello Student, 18, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110029
+      },
+      {
+        "uprn": "9001000297991",
+        "formattedAddress": "Hello Student, 19, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110028
+      },
+      {
+        "uprn": "9001000297992",
+        "formattedAddress": "Hello Student, 22, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110027
+      },
+      {
+        "uprn": "9001000297993",
+        "formattedAddress": "Hello Student, 26, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110026
+      },
+      {
+        "uprn": "9001000297994",
+        "formattedAddress": "Hello Student, 27, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110025
+      },
+      {
+        "uprn": "9001000297995",
+        "formattedAddress": "Hello Student, 28, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110024
+      },
+      {
+        "uprn": "9001000297996",
+        "formattedAddress": "Hello Student, 30, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110023
+      },
+      {
+        "uprn": "9001000297997",
+        "formattedAddress": "Hello Student, 31, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110022
+      },
+      {
+        "uprn": "9001000297998",
+        "formattedAddress": "Hello Student, 32, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110021
+      },
+      {
+        "uprn": "9001000297999",
+        "formattedAddress": "Hello Student, 34, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110020
+      },
+      {
+        "uprn": "9001000298000",
+        "formattedAddress": "Hello Student, 41, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110019
+      },
+      {
+        "uprn": "9001000298001",
+        "formattedAddress": "Hello Student, 6, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110018
+      },
+      {
+        "uprn": "9001000298002",
+        "formattedAddress": "Hello Student, 7, Ground Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110017
+      },
+      {
+        "uprn": "9001000298003",
+        "formattedAddress": "Hello Student, 14, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110016
+      },
+      {
+        "uprn": "9001000298004",
+        "formattedAddress": "Hello Student, 15, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110015
+      },
+      {
+        "uprn": "9001000298005",
+        "formattedAddress": "Hello Student, 16, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110014
+      },
+      {
+        "uprn": "9001000298006",
+        "formattedAddress": "Hello Student, 21, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110013
+      },
+      {
+        "uprn": "9001000298007",
+        "formattedAddress": "Hello Student, 23, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110012
+      },
+      {
+        "uprn": "9001000298008",
+        "formattedAddress": "Hello Student, 24, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110011
+      },
+      {
+        "uprn": "9001000298009",
+        "formattedAddress": "Hello Student, 25, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110010
+      },
+      {
+        "uprn": "9001000298010",
+        "formattedAddress": "Hello Student, 29, First Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110009
+      },
+      {
+        "uprn": "9001000298011",
+        "formattedAddress": "Hello Student, 33, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110008
+      },
+      {
+        "uprn": "9001000298012",
+        "formattedAddress": "Hello Student, 35, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110007
+      },
+      {
+        "uprn": "9001000298013",
+        "formattedAddress": "Hello Student, 36, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110006
+      },
+      {
+        "uprn": "9001000298014",
+        "formattedAddress": "Hello Student, 37, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110005
+      },
+      {
+        "uprn": "9001000298015",
+        "formattedAddress": "Hello Student, 38, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110004
+      },
+      {
+        "uprn": "9001000298016",
+        "formattedAddress": "Hello Student, 39, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110003
+      },
+      {
+        "uprn": "9001000298017",
+        "formattedAddress": "Hello Student, 40, Second Floor, The Registry, 1-2 St Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "NAG",
+        "censusAddressType": "CE",
+        "censusEstabType": "HALL OF RESIDENCE",
+        "countryCode": "E",
+        "confidenceScore": 1110002
+      },
+      {
+        "uprn": "1775105094",
+        "formattedAddress": "3 St. Michaels Road, Portsmouth, PO1 2EE",
+        "addressType": "PAF",
+        "censusAddressType": "HH",
+        "censusEstabType": "Household",
+        "countryCode": "E",
+        "confidenceScore": 100001
+      }
+    ],
+    "filter": "",
+    "epoch": "",
+    "limit": 100,
+    "offset": 0,
+    "total": 42,
+    "maxScore": 0
+  },
+  "status": {
+    "code": 200,
+    "message": "Ok"
+  },
+  "errors": []
+}

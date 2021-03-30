@@ -36,6 +36,7 @@ object Tokens {
   val defaultPreProcessFolder = "parser.input-pre-post-processing.folder"
   val defaultMapFolder = "parser.scoring.folder"
   val defaultCodelistFolder = "parser.codelist.folder"
+  val defaultPostcodeFolder = "parser.precanned.folder"
   val defaultDelimiter = "="
 
   val ocrlist: Map[String, String] = fileToMap(s"ocr", defaultPreProcessFolder)
@@ -395,6 +396,9 @@ object Tokens {
    * List of workplace classifications to be removed from the search
    */
   lazy val workplaceExclusionClassificationList: Seq[String] = fileToArray(s"workplaceExclusionClassificationList")
+
+  lazy val postcodeTest: Seq[String] = Tokens.fileToList("PO12EE.json",defaultCodelistFolder)
+
 
   /**
     * Convert external file into list

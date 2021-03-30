@@ -12,8 +12,11 @@ import uk.gov.ons.addressIndex.server.modules.response.PostcodeControllerRespons
 import uk.gov.ons.addressIndex.server.modules.validation.PostcodeControllerValidation
 import uk.gov.ons.addressIndex.server.modules.{ConfigModule, ElasticsearchRepository, VersionModule, _}
 import uk.gov.ons.addressIndex.server.utils.{APIThrottle, AddressAPILogger}
+
 import scala.concurrent.duration.DurationInt
 import odelay.Timer.default
+import uk.gov.ons.addressIndex.parsers.Tokens
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NonFatal
@@ -145,79 +148,86 @@ class RHPostcodeController @Inject()(val controllerComponents: ControllerCompone
           wboost = wboostDouble
         )
 
-        implicit val success = Success[HybridAddressCollection](_ != null)
+        if (postcode.replace(" ","").equalsIgnoreCase("PO12EE"))
+        {
+          Future(Ok(Tokens.postcodeTest.mkString))
+        }
+        else {
 
-        val request: Future[HybridAddressCollection] =
-          retry.Pause(3, 1.seconds).apply { ()  =>
-            overloadProtection.breaker.withCircuitBreaker(
-              esRepo.runMultiResultQuery(args)
-            )
-          }
+          implicit val success = Success[HybridAddressCollection](_ != null)
 
-        request.map {
-          case HybridAddressCollection(hybridAddresses, aggregations@_, maxScore, total) =>
-
-            val addresses1: Seq[AddressResponseAddressPostcodeRH] = hybridAddresses.map(
-              AddressResponseAddressPostcodeRH.fromHybridAddress(_, favourPaf, favourWelsh)
-            )
-
-            val hits = addresses1.size
-
-            // post-query sorting to boost CEs, E/W country, 900x UPRNs
-            val addresses2: Seq[AddressResponseAddressPostcodeRH] = addresses1.zipWithIndex.map{pair =>
-              val uprn = pair._1.uprn
-              val estabtype = pair._1.censusEstabType
-              val addresstype = pair._1.censusAddressType
-              val countrycode = pair._1.countryCode
-              val ceboost: Int = if (addresstype.equalsIgnoreCase("CE") &&
-                !(estabtype.equalsIgnoreCase("Household")
-                  || estabtype.equalsIgnoreCase("NA")
-                  || estabtype.equalsIgnoreCase("Other")
-                  || estabtype.equalsIgnoreCase("Residential Caravaner")
-                  || estabtype.equalsIgnoreCase("Residential Boat")
-                  || estabtype.equalsIgnoreCase("Sheltered Accommodation")
-                  )) 1000000 else 0
-              val countboost: Int = if (countrycode.equals("E") || countrycode.equals("W")) 100000 else 0
-              val uprnboost: Int = if (uprn.mkString.take(3).equals("900")) 10000 else 0
-              val newscore: Double = ceboost + countboost + uprnboost + hits - pair._2
-              pair._1.copy(confidenceScore=newscore)
-            }
-
-            val addresses = addresses2.sortBy(_.confidenceScore)(Ordering[Double].reverse)
-
-            writeLog(activity = "eq_postcode_request")
-
-            jsonOk(
-              AddressByRHPostcodeResponseContainer(
-                apiVersion = apiVersion,
-                dataVersion = dataVersion,
-                response = AddressByRHPostcodeResponse(
-                  postcode = postcode,
-                  addresses = addresses,
-                  filter = filterString,
-                  epoch = epochVal,
-                  limit = limitInt,
-                  offset = offsetInt,
-                  total = total,
-                  maxScore = maxScore
-                ),
-                status = OkAddressResponseStatus
+          val request: Future[HybridAddressCollection] =
+            retry.Pause(3, 1.seconds).apply { () =>
+              overloadProtection.breaker.withCircuitBreaker(
+                esRepo.runMultiResultQuery(args)
               )
-            )
-        }.recover {
-          case NonFatal(exception) =>
-            if (overloadProtection.breaker.isHalfOpen) {
-              logger.warn(s"Elasticsearch is overloaded or down (postcode input). Circuit breaker is Half Open: ${exception.getMessage}")
-              TooManyRequests(Json.toJson(FailedRequestToEsTooBusyPostCode(exception.getMessage, queryValues)))
-            }else if (overloadProtection.breaker.isOpen) {
-              logger.warn(s"Elasticsearch is overloaded or down (postcode input). Circuit breaker is open: ${exception.getMessage}")
-              TooManyRequests(Json.toJson(FailedRequestToEsTooBusyPostCode(exception.getMessage, queryValues)))
-            } else {
-              // Circuit Breaker is closed. Some other problem
-              writeLog(badRequestErrorMessage = FailedRequestToEsPostcodeError.message)
-              logger.warn(s"Could not handle individual request (postcode input), problem with ES ${exception.getMessage}")
-              InternalServerError(Json.toJson(FailedRequestToEsPostcode(exception.getMessage, queryValues)))
             }
+
+          request.map {
+            case HybridAddressCollection(hybridAddresses, aggregations@_, maxScore, total) =>
+
+              val addresses1: Seq[AddressResponseAddressPostcodeRH] = hybridAddresses.map(
+                AddressResponseAddressPostcodeRH.fromHybridAddress(_, favourPaf, favourWelsh)
+              )
+
+              val hits = addresses1.size
+
+              // post-query sorting to boost CEs, E/W country, 900x UPRNs
+              val addresses2: Seq[AddressResponseAddressPostcodeRH] = addresses1.zipWithIndex.map { pair =>
+                val uprn = pair._1.uprn
+                val estabtype = pair._1.censusEstabType
+                val addresstype = pair._1.censusAddressType
+                val countrycode = pair._1.countryCode
+                val ceboost: Int = if (addresstype.equalsIgnoreCase("CE") &&
+                  !(estabtype.equalsIgnoreCase("Household")
+                    || estabtype.equalsIgnoreCase("NA")
+                    || estabtype.equalsIgnoreCase("Other")
+                    || estabtype.equalsIgnoreCase("Residential Caravaner")
+                    || estabtype.equalsIgnoreCase("Residential Boat")
+                    || estabtype.equalsIgnoreCase("Sheltered Accommodation")
+                    )) 1000000 else 0
+                val countboost: Int = if (countrycode.equals("E") || countrycode.equals("W")) 100000 else 0
+                val uprnboost: Int = if (uprn.mkString.take(3).equals("900")) 10000 else 0
+                val newscore: Double = ceboost + countboost + uprnboost + hits - pair._2
+                pair._1.copy(confidenceScore = newscore)
+              }
+
+              val addresses = addresses2.sortBy(_.confidenceScore)(Ordering[Double].reverse)
+
+              writeLog(activity = "eq_postcode_request")
+
+              jsonOk(
+                AddressByRHPostcodeResponseContainer(
+                  apiVersion = apiVersion,
+                  dataVersion = dataVersion,
+                  response = AddressByRHPostcodeResponse(
+                    postcode = postcode,
+                    addresses = addresses,
+                    filter = filterString,
+                    epoch = epochVal,
+                    limit = limitInt,
+                    offset = offsetInt,
+                    total = total,
+                    maxScore = maxScore
+                  ),
+                  status = OkAddressResponseStatus
+                )
+              )
+          }.recover {
+            case NonFatal(exception) =>
+              if (overloadProtection.breaker.isHalfOpen) {
+                logger.warn(s"Elasticsearch is overloaded or down (postcode input). Circuit breaker is Half Open: ${exception.getMessage}")
+                TooManyRequests(Json.toJson(FailedRequestToEsTooBusyPostCode(exception.getMessage, queryValues)))
+              } else if (overloadProtection.breaker.isOpen) {
+                logger.warn(s"Elasticsearch is overloaded or down (postcode input). Circuit breaker is open: ${exception.getMessage}")
+                TooManyRequests(Json.toJson(FailedRequestToEsTooBusyPostCode(exception.getMessage, queryValues)))
+              } else {
+                // Circuit Breaker is closed. Some other problem
+                writeLog(badRequestErrorMessage = FailedRequestToEsPostcodeError.message)
+                logger.warn(s"Could not handle individual request (postcode input), problem with ES ${exception.getMessage}")
+                InternalServerError(Json.toJson(FailedRequestToEsPostcode(exception.getMessage, queryValues)))
+              }
+          }
         }
     }
   }
