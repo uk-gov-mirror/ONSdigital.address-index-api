@@ -149,6 +149,39 @@ object AddressByRHUprnResponse {
   }
 
   /**
+    * Transforms hybrid object returned by ES into an Address that will be in the json response
+    *
+    * @param other HybridAddress from ES
+    * @return
+    */
+  def fromInput(input: String, addressType: String): AddressResponseAddressUPRNRH = {
+
+    val fields = input.split(",")
+    val formAddress = fields(7) + " " + fields(8) + " " + fields(9) + " " + fields(10) + " " + fields(11)
+    val postcodeStart = fields(11).take(2)
+    val welshList: List[String] = List("CF", "CH", "GL", "HR", "LD", "LL", "NP", "SA", "SY")
+    val cCode = if (welshList.contains(postcodeStart)) "W" else "E"
+
+     AddressResponseAddressUPRNRH(
+      uprn = fields(0),
+      formattedAddress = formAddress.replaceAll("   "," ").replaceAll("  "," "),
+      addressLine1 = fields(7),
+      addressLine2 = fields(8),
+      addressLine3 = fields(9),
+      townName = fields(10),
+      postcode = fields(11),
+      foundAddressType = "PAF",
+      censusAddressType = fields(2),
+      censusEstabType = fields(3),
+      countryCode = cCode,
+      organisationName = fields(6)
+    )
+  }
+
+
+
+
+  /**
     * A temporary best endeavour approach until Neil H's magic algorithm is revealed.
     *
     * @param addressLines previously determined address lines if available

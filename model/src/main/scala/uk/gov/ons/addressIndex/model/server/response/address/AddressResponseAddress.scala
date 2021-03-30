@@ -133,8 +133,6 @@ object AddressResponseAddress {
     )
   }
 
-
-
   /**
     * Gets the right (most often - the most recent) address from an array of NAG addresses
     *
