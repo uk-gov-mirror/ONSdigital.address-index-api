@@ -86,4 +86,22 @@ object AddressResponseAddressPostcodeRH {
       countryCode = other.countryCode
     )
   }
+
+  def fromInput(input: String): AddressResponseAddressPostcodeRH = {
+
+    val fields = input.split(",")
+    val formAddress = fields(7) + " " + fields(8) + " " + fields(9) + " " + fields(10) + " " + fields(11)
+    val postcodeStart = fields(11).take(2)
+    val welshList: List[String] = List("CF", "CH", "GL", "HR", "LD", "LL", "NP", "SA", "SY")
+    val cCode = if (welshList.contains(postcodeStart)) "W" else "E"
+
+    AddressResponseAddressPostcodeRH(
+      uprn = fields(0),
+      formattedAddress = formAddress.replaceAll("   "," ").replaceAll("  "," "),
+      addressType = "PAF",
+      censusAddressType = fields(2),
+      censusEstabType = fields(3),
+      countryCode = cCode,
+    )
+  }
 }

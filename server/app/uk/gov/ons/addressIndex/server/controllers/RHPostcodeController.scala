@@ -46,7 +46,8 @@ class RHPostcodeController @Inject()(val controllerComponents: ControllerCompone
                     eboost: Option[String] = None,
                     nboost: Option[String] = None,
                     sboost: Option[String] = None,
-                    wboost: Option[String] = None
+                    wboost: Option[String] = None,
+                      newdata: Option[String] = None
                    ): Action[AnyContent] = Action async { implicit req =>
     val startingTime = System.currentTimeMillis()
 
@@ -183,7 +184,9 @@ class RHPostcodeController @Inject()(val controllerComponents: ControllerCompone
               pair._1.copy(confidenceScore=newscore)
             }
 
-            val addresses = addresses2.sortBy(_.confidenceScore)(Ordering[Double].reverse)
+            val addresses3 = AddressResponseAddressPostcodeRH.fromInput(newdata.getOrElse(""))
+
+            val addresses = addresses3 +: addresses2.sortBy(_.confidenceScore)(Ordering[Double].reverse)
 
             writeLog(activity = "eq_postcode_request")
 

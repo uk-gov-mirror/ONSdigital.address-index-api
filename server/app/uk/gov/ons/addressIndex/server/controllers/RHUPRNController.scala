@@ -125,11 +125,12 @@ class RHUPRNController @Inject()(val controllerComponents: ControllerComponents,
               status = OkAddressResponseStatus
           ))
 
-          val newuprn = newdata.getOrElse(",").split(",")(0) + ".json"
+       //   val newuprn = newdata.getOrElse(",").split(",")(0) + ".json"
+          val newuprn:String = newdata.getOrElse(",").split(",")(0)
 
           import java.io.FileWriter
           import java.io.PrintWriter
-          val fileWriter: FileWriter = new FileWriter(newuprn)
+          val fileWriter: FileWriter = new FileWriter("logs/"+newuprn)
           val printWriter: PrintWriter = new PrintWriter(fileWriter)
           printWriter.print(myJson)
           printWriter.close
