@@ -129,8 +129,9 @@ class RHPostcodeController @Inject()(val controllerComponents: ControllerCompone
         res // a validation error
 
       case _ =>
+        val foundpostcode = Try(newdata.getOrElse("").split(",")(11)).getOrElse("")
         val args = PostcodeArgs(
-          postcode = postcode,
+          postcode = if (foundpostcode.isEmpty) postcode else foundpostcode,
           start = offsetInt,
           limit = limitInt,
           filters = filterString,
@@ -184,9 +185,38 @@ class RHPostcodeController @Inject()(val controllerComponents: ControllerCompone
               pair._1.copy(confidenceScore=newscore)
             }
 
-            val addresses3 = AddressResponseAddressPostcodeRH.fromInput(newdata.getOrElse(""))
+            val addresses3 = Try(AddressResponseAddressPostcodeRH.fromInput(newdata.getOrElse(""))).getOrElse(null)
+       //     val addresses3 = AddressResponseAddressPostcodeRH.fromInput(newdata.getOrElse(""))
 
-            val addresses = addresses3 +: addresses2.sortBy(_.confidenceScore)(Ordering[Double].reverse)
+            val addresses = addresses2.sortBy(_.confidenceScore)(Ordering[Double].reverse)
+
+            if (!foundpostcode.isEmpty) {
+            val myJson = Json.toJson((
+              AddressByRHPostcodeResponseContainer(
+                apiVersion = apiVersion,
+                dataVersion = dataVersion,
+                response = AddressByRHPostcodeResponse(
+                  postcode = if (foundpostcode.isEmpty) postcode else foundpostcode,
+                  addresses = if (foundpostcode.isEmpty) addresses else addresses3 +: addresses,
+                  filter = filterString,
+                  epoch = epochVal,
+                  limit = limitInt,
+                  offset = offsetInt,
+                  total = total,
+                  maxScore = maxScore
+                ),
+                status = OkAddressResponseStatus
+              )
+              ))
+
+
+            import java.io.FileWriter
+            import java.io.PrintWriter
+            val fileWriter: FileWriter = new FileWriter("logs/"+foundpostcode)
+            val printWriter: PrintWriter = new PrintWriter(fileWriter)
+            printWriter.print(myJson)
+            printWriter.close
+            }
 
             writeLog(activity = "eq_postcode_request")
 
@@ -195,8 +225,8 @@ class RHPostcodeController @Inject()(val controllerComponents: ControllerCompone
                 apiVersion = apiVersion,
                 dataVersion = dataVersion,
                 response = AddressByRHPostcodeResponse(
-                  postcode = postcode,
-                  addresses = addresses,
+                  postcode = if (foundpostcode.isEmpty) postcode else foundpostcode,
+                  addresses = if (foundpostcode.isEmpty) addresses else addresses3 +: addresses,
                   filter = filterString,
                   epoch = epochVal,
                   limit = limitInt,
