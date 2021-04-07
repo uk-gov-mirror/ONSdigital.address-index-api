@@ -202,7 +202,7 @@ class RHPostcodeController @Inject()(val controllerComponents: ControllerCompone
                   epoch = epochVal,
                   limit = limitInt,
                   offset = offsetInt,
-                  total = total,
+                  total = total+1,
                   maxScore = maxScore
                 ),
                 status = OkAddressResponseStatus
